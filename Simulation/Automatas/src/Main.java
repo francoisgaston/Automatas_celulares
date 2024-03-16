@@ -9,7 +9,7 @@ public class Main {
         int N = 2;
         double interactionRadius = 1;
         boolean boundaryConditions = true;
-        int totalTime = 4;
+        int totalTime = 20;
 
         SimulationFactory simulator = new SimulationFactory(frameSize, noise, L, speed, N, interactionRadius, boundaryConditions, totalTime);
 

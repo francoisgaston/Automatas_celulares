@@ -34,7 +34,7 @@ public class SimulationFactory {
     public void simulation(){
         try {
             FileWriter writer = new FileWriter("output/DataSimulation.csv");
-            writer.write("x,y,gridX, gridY,vel,angulo,id");
+            writer.write("x,y,gridX, gridY,vel,angulo,id,time");
             Random random = new Random();
             for(int t = 0; t < totalTime; t++){
                 SimulatedGrid.CIM(ParticlesList);
@@ -45,8 +45,8 @@ public class SimulationFactory {
                     particle.move(frameSize);
                     SimulatedGrid.reposition(particle);
                     System.out.println(particle);
-                    writer.write( '\n' + particle.getX() + "," + particle.getY() + "," + particle.getxCell() + "," +
-                            particle.getyCell() + "," + particle.getSpeed() + "," + particle.getAngle() + "," + particle.getId());
+                    writer.write( "\n" + particle.getX() + "," + particle.getY() + "," + particle.getxCell() + "," +
+                            particle.getyCell() + "," + particle.getSpeed() + "," + particle.getAngle() + "," + particle.getId() + "," + t);
                 }
             }
             writer.close();
