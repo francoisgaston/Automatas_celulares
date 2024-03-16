@@ -1,0 +1,10 @@
+{
+  "frameSize": 1,
+  "noise": 1,
+  "L": 100,
+  "speed": 1,
+  "N": 3,
+  "interactionRadius": 2,
+  "boundaryConditions": true,
+  "totalTime": 20
+}

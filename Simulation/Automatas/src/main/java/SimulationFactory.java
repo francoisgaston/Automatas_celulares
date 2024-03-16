@@ -1,3 +1,6 @@
+import com.google.gson.Gson;
+
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -54,11 +57,26 @@ public class SimulationFactory {
         } catch(IOException e){
             System.out.println("Error al escribir en el archivo: " + e.getMessage());
         }
-
-
-
-
     }
 
+    public static void main(String[] args) {
+        SimulationConfig config = readConfig("input/input.json");
+        if(config == null) {
+            return;
+        }
+        SimulationFactory simulator = new SimulationFactory(config.getFrameSize(), config.getNoise(), config.getL(), config.getSpeed(), config.getN(), config.getInteractionRadius(), config.getBoundaryConditions(), config.getTotalTime());
 
+        simulator.simulation();
+    }
+
+    public static SimulationConfig readConfig(String path){
+        Gson gson = new Gson();
+        SimulationConfig sConfig = null;
+        try (FileReader reader = new FileReader(path)) {
+            sConfig = gson.fromJson(reader, SimulationConfig.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return sConfig;
+    }
 }
