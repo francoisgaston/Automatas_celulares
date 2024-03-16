@@ -30,3 +30,9 @@ bin/
 
 ### JetBrains ###
 .idea
+
+### output ###
+.csv
+.gif
+.png
+.jpg
