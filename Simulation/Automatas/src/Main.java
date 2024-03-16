@@ -3,11 +3,11 @@ public class Main {
     public static void main(String[] args) {
 
         int frameSize = 1;
-        double noise = 0.001;
-        double L = 10;
-        double speed = 2;
-        int N = 2;
-        double interactionRadius = 1;
+        double noise = 1;
+        double L = 100;
+        double speed = 1;
+        int N = 3;
+        double interactionRadius = 2;
         boolean boundaryConditions = true;
         int totalTime = 20;
 

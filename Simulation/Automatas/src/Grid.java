@@ -91,8 +91,7 @@ public class Grid {
 
         //System.out.println(dy + "---" + dx);
         double hypotenuse = Math.pow(Math.pow(dx, 2) + Math.pow(dy, 2), 0.5);
-        double deltaBorder = hypotenuse - (particle1.getInteractionRadius() + particle2.getInteractionRadius());
-        return interactionRadius>deltaBorder;
+        return interactionRadius>hypotenuse;
     }
 
 

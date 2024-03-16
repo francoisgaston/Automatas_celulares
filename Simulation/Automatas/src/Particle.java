@@ -15,6 +15,7 @@ public class Particle {
     private int yCell;
     private int[][] neighbourCells;
     private final List<Particle> neighbours;
+    private static final Random random = new Random();
 
 
     public Particle(double x, double y, double speed, double angle, double interactionRadius) {
@@ -29,7 +30,6 @@ public class Particle {
 
     public Particle(double L, double speed, double interactionRadius){
         this.id = nextId++;
-        Random random = new Random();
         this.x = random.nextDouble(L);
         this.y = random.nextDouble(L);
         this.speed = speed;

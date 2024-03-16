@@ -17,7 +17,7 @@ df = pd.read_csv('../Simulation/Automatas/output/DataSimulation.csv')
 tiempos = df['time'].unique()
 
 # Definir el radio del círculo para representar la partícula
-radio_particula = 0.5
+radio_particula = 2
 
 # Iterar sobre los tiempos
 for tiempo in tiempos:
@@ -37,8 +37,8 @@ for tiempo in tiempos:
         plt.arrow(fila['x'], fila['y'], dx, dy, head_width=0.2, head_length=0.2, fc='black', ec='black')
     
     # Configurar los ejes
-    plt.xlim(0, 10)
-    plt.ylim(0, 10)
+    plt.xlim(0, 100)
+    plt.ylim(0, 100)
     plt.xlabel('Posición X')
     plt.ylabel('Posición Y')
     plt.title(f'Gráfico de simulación - Tiempo {tiempo}')
@@ -75,4 +75,4 @@ for archivo in archivos_png:
 ruta_gif = './output.gif'
 
 # Escribir las imágenes en un archivo GIF
-imageio.mimsave(ruta_gif, imagenes, duration=100)  # Duración de cada imagen en segundos
+imageio.mimsave(ruta_gif, imagenes, duration=1000)  # Duración de cada imagen en segundos
