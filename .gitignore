@@ -40,3 +40,6 @@ Simulation/Automatas/.idea
 .jpg
 *.iml
 Simulation/Automatas/*.iml
+Simulation/Automatas/output/*.csv
+Visualization/img/*.png
+Visualization/*.gif
