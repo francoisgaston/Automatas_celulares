@@ -11,15 +11,22 @@ public class Particle {
     private double speed;
     private double angle;
     private double interactionRadius;
-    private int xCell;
-    private int yCell;
-    private int[][] neighbourCells;
     private final List<Particle> neighbours;
     private static final Random random = new Random();
 
 
     public Particle(double x, double y, double speed, double angle, double interactionRadius) {
         this.id = nextId++;
+        this.x = x;
+        this.y = y;
+        this.speed = speed;
+        this.angle = angle;
+        this.interactionRadius = interactionRadius;
+        this.neighbours = new ArrayList<>();
+    }
+
+    public Particle(double x, double y, double speed, double angle, double interactionRadius, int id) {
+        this.id = id;
         this.x = x;
         this.y = y;
         this.speed = speed;
@@ -38,32 +45,33 @@ public class Particle {
         this.neighbours = new ArrayList<>();
     }
 
-    public double interaction(List<Particle> particles){
+    public Particle nextParticle(double FrameSize, double noise){
+        double new_x = x + FrameSize * speed * Math.cos(angle);
+        double new_y = y + FrameSize * speed * Math.sin(angle);
+
+        double new_angle = new_angle();
+        new_angle += random.nextDouble(2*noise) - noise;
+
+        return new Particle(new_x, new_y, speed, new_angle, interactionRadius, id);
+    }
+
+    private double new_angle(){
         double sinProm = Math.sin(this.angle);
         double cosProm = Math.cos(this.angle);
-        for(Particle particle : particles){
+
+        for(Particle particle : neighbours){
             sinProm += Math.sin(particle.angle);
             cosProm += Math.sin(particle.angle);
         }
-        sinProm = sinProm/(particles.size()+1);
-        cosProm = cosProm/(particles.size()+1);
+
+        sinProm = sinProm/(neighbours.size()+1);
+        cosProm = cosProm/(neighbours.size()+1);
         return Math.atan2(sinProm, cosProm);
     }
 
-    public void move(int frameSize){
-        double Vx = getVx();
-        double Vy = getVy();
-
-        this.x += Vx * frameSize;
-        this.y += Vy * frameSize;
-    }
-
-    public double getVx(){
-        return speed * Math.cos(angle);
-    }
-
-    public double getVy(){
-        return speed * Math.sin(angle);
+    public boolean isNeighbour(Particle particle, Grid SimulatedGrid){
+        double distance = SimulatedGrid.gridDistance(this, particle);
+        return interactionRadius>distance;
     }
 
     public double getX() {
@@ -110,30 +118,6 @@ public class Particle {
         return id;
     }
 
-    public int getxCell() {
-        return xCell;
-    }
-
-    public void setxCell(int xCell) {
-        this.xCell = xCell;
-    }
-
-    public int getyCell() {
-        return yCell;
-    }
-
-    public void setyCell(int yCell) {
-        this.yCell = yCell;
-    }
-
-    public int[][] getNeighbourCells() {
-        return neighbourCells;
-    }
-
-    public void setNeighbourCells(int[][] neighbourCells) {
-        this.neighbourCells = neighbourCells;
-    }
-
     public List<Particle> getNeighbours() {
         return this.neighbours;
     }
@@ -153,7 +137,7 @@ public class Particle {
 
     @Override
     public String toString() {
-        return "x:" + x + ", Y:" + y + ", gridX:" + xCell + ", gridY:" + yCell + ", vel:" + speed + ", angulo:" + angle + ", id:" + id;
+        return "x:" + x + ", Y:" + y + ", vel:" + speed + ", angulo:" + angle + ", id:" + id;
     }
 
 }

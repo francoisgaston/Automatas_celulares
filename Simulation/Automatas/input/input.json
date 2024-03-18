@@ -1,10 +1,12 @@
 {
   "frameSize": 1,
-  "noise": 1,
-  "L": 5,
-  "speed": 0.03,
-  "N": 300,
-  "interactionRadius": 0.5,
+  "noise": 0.01,
+  "L": 15,
+  "speed": 1,
+  "N": 4,
+  "interactionRadius": 2,
   "boundaryConditions": true,
-  "totalTime": 700
+  "totalTime": 20,
+  "PolarizationPath": "output/DataPolarization.csv",
+  "SimulationPath": "output/DataSimulation.csv"
 }
