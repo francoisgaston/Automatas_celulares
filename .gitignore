@@ -43,3 +43,5 @@ Simulation/Automatas/*.iml
 Simulation/Automatas/output/*.csv
 Visualization/img/*.png
 Visualization/*.gif
+Visualization/output/*.gif
+Visualization/output/*.mp4
