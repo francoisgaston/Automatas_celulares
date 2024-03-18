@@ -39,11 +39,15 @@ public class Particle {
     }
 
     public double interaction(List<Particle> particles){
-        double prom = this.angle;
+        double sinProm = Math.sin(this.angle);
+        double cosProm = Math.cos(this.angle);
         for(Particle particle : particles){
-            prom += particle.angle;
+            sinProm += Math.sin(particle.angle);
+            cosProm += Math.sin(particle.angle);
         }
-        return prom/(particles.size()+1);
+        sinProm = sinProm/(particles.size()+1);
+        cosProm = cosProm/(particles.size()+1);
+        return Math.atan2(sinProm, cosProm);
     }
 
     public void move(int frameSize){

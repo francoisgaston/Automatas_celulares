@@ -37,8 +37,8 @@ for tiempo in tiempos:
         plt.arrow(fila['x'], fila['y'], dx, dy, head_width=0.2, head_length=0.2, fc='black', ec='black')
     
     # Configurar los ejes
-    plt.xlim(0, 100)
-    plt.ylim(0, 100)
+    plt.xlim(0, 15)
+    plt.ylim(0, 15)
     plt.xlabel('Posición X')
     plt.ylabel('Posición Y')
     plt.title(f'Gráfico de simulación - Tiempo {tiempo}')
