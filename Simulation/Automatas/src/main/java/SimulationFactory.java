@@ -36,11 +36,17 @@ public class SimulationFactory {
 
     public void simulation(){
         try {
-            FileWriter writer = new FileWriter("output/DataSimulation.csv");
-            writer.write("x,y,gridX, gridY,vel,angulo,id,time");
+            FileWriter writer_polarization = new FileWriter("output/DataPolarization.csv");
+            writer_polarization.write("tiempo,polarization");
+            double VxSum = 0, VySum = 0;
+
+            FileWriter writer_data = new FileWriter("output/DataSimulation.csv");
+            writer_data.write("x,y,gridX, gridY,vel,angulo,id,time");
             Random random = new Random();
             for(int t = 0; t < totalTime; t++){
                 SimulatedGrid.CIM(ParticlesList);
+                VxSum = 0;
+                VySum = 0;
                 for(Particle particle : ParticlesList){
                     double new_angle = particle.interaction(particle.getNeighbours());
                     new_angle += random.nextDouble(2*noise) - noise;
@@ -48,11 +54,17 @@ public class SimulationFactory {
                     particle.move(frameSize);
                     SimulatedGrid.reposition(particle);
                     System.out.println(particle);
-                    writer.write( "\n" + particle.getX() + "," + particle.getY() + "," + particle.getxCell() + "," +
+                    writer_data.write( "\n" + particle.getX() + "," + particle.getY() + "," + particle.getxCell() + "," +
                             particle.getyCell() + "," + particle.getSpeed() + "," + particle.getAngle() + "," + particle.getId() + "," + t);
+
+                    VxSum += particle.getVx();
+                    VySum += particle.getVy();
                 }
+                double polarization = Math.sqrt(Math.pow(VxSum, 2) +  Math.pow(VySum, 2))/(ParticlesList.size() * ParticlesList.get(0).getSpeed());
+                writer_polarization.write( "\n" + t + "," + polarization);
             }
-            writer.close();
+            writer_data.close();
+            writer_polarization.close();
 
         } catch(IOException e){
             System.out.println("Error al escribir en el archivo: " + e.getMessage());

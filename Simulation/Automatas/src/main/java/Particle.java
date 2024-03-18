@@ -51,11 +51,19 @@ public class Particle {
     }
 
     public void move(int frameSize){
-        double Vx = speed * Math.cos(angle);
-        double Vy = speed * Math.sin(angle);
+        double Vx = getVx();
+        double Vy = getVy();
 
         this.x += Vx * frameSize;
         this.y += Vy * frameSize;
+    }
+
+    public double getVx(){
+        return speed * Math.cos(angle);
+    }
+
+    public double getVy(){
+        return speed * Math.sin(angle);
     }
 
     public double getX() {
