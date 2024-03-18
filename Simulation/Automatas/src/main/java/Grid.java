@@ -117,8 +117,7 @@ public class Grid {
         }
     }
 
-
-    public boolean reposition(Particle particle){
+    public void reposition(Particle particle){
         ParticleGrid[particle.getxCell()][particle.getyCell()].removeParticle(particle);
 
         particle.setX((particle.getX()+L)%L);
@@ -135,6 +134,6 @@ public class Grid {
             ParticleGrid[gridX][gridY] = new ParticlesList(new ArrayList<>());
         }
 
-        return ParticleGrid[gridX][gridY].addParticle(particle);
+        ParticleGrid[gridX][gridY].addParticle(particle);
     }
 }
