@@ -6,6 +6,7 @@ public class SimulationConfig {
     private int N;
     private double interactionRadius;
     private boolean boundaryConditions;
+    private boolean CircleBoundaryConditions;
     private int totalTime;
     private String PolarizationPath;
     private String SimulationPath;
@@ -96,5 +97,13 @@ public class SimulationConfig {
 
     public void setSimulationPath(String outputSimulation) {
         SimulationPath = outputSimulation;
+    }
+
+    public boolean getCircleBoundaryConditions() {
+        return CircleBoundaryConditions;
+    }
+
+    public void setCircleBoundaryConditions(boolean circleBoundaryConditions) {
+        CircleBoundaryConditions = circleBoundaryConditions;
     }
 }

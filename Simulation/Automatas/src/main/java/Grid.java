@@ -5,13 +5,15 @@ public class Grid {
     private final double L;
     private final double Msize;
     private final boolean boundaryConditions;
+    private final boolean CircleBoundaryConditions;
     private final ParticlesList[][] ParticleGrid;
 
-    public Grid(int M, double L, boolean boundaryConditions) {
+    public Grid(int M, double L, boolean boundaryConditions, boolean CircleBoundaryConditions) {
         this.M = M;
         this.L = L;
         this.Msize = L/M;
         this.boundaryConditions = boundaryConditions;
+        this.CircleBoundaryConditions = CircleBoundaryConditions;
         this.ParticleGrid = new ParticlesList[M][M];
     }
 
@@ -20,10 +22,15 @@ public class Grid {
         this.L = prevGrid.L;
         this.Msize = L/M;
         this.boundaryConditions = prevGrid.boundaryConditions;
+        this.CircleBoundaryConditions = prevGrid.CircleBoundaryConditions;
         this.ParticleGrid = new ParticlesList[M][M];
     }
 
     public boolean addParticle(Particle particle){
+        if((particle.getX() < 0 || particle.getX() > L || particle.getY() < 0 || particle.getY() > L) && CircleBoundaryConditions){
+            particle.increaseId();
+        }
+
         particle.setX((particle.getX()+L)%L);
         particle.setY((particle.getY()+L)%L);
 

@@ -9,7 +9,10 @@ public class Main {
         if(config == null) {
             return;
         }
-        SimulationFactory simulator = new SimulationFactory(config.getFrameSize(), config.getNoise(), config.getL(), config.getSpeed(), config.getN(), config.getInteractionRadius(), config.getBoundaryConditions(), config.getTotalTime());
+        SimulationFactory simulator =
+                new SimulationFactory(config.getFrameSize(), config.getNoise(), config.getL(), config.getSpeed(),
+                config.getN(), config.getInteractionRadius(), config.getBoundaryConditions(),
+                config.getCircleBoundaryConditions(),config.getTotalTime());
 
         simulator.simulation(config.getPolarizationPath(), config.getSimulationPath());
     }

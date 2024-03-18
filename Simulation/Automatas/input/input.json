@@ -6,6 +6,7 @@
   "N": 4,
   "interactionRadius": 2,
   "boundaryConditions": true,
+  "CircleBoundaryConditions": true,
   "totalTime": 20,
   "PolarizationPath": "output/DataPolarization.csv",
   "SimulationPath": "output/DataSimulation.csv"

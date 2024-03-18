@@ -14,13 +14,14 @@ public class SimulationFactory {
     private final int frameSize;
     private final double noise;
 
-    public SimulationFactory(int frameSize, double noise, double L, double speed, int N, double interactionRadius, boolean boundaryConditions, int totalTime) {
+    public SimulationFactory(int frameSize, double noise, double L, double speed, int N, double interactionRadius, boolean boundaryConditions, boolean CircleBoundaryConditions, int totalTime) {
         this.noise = noise;
         int M = (int) Math.floor(L/interactionRadius);
-        this.SimulatedGrid = new Grid(M, L, boundaryConditions);
-        this.ParticlesList = new ArrayList<>();
         this.totalTime = totalTime;
         this.frameSize = frameSize;
+
+        this.SimulatedGrid = new Grid(M, L, boundaryConditions, CircleBoundaryConditions);
+        this.ParticlesList = new ArrayList<>();
         for (int i = 0; i < N; i++) {
             Particle auxParticle = new Particle(L,speed, interactionRadius);
             while (!this.SimulatedGrid.addParticle(auxParticle)) {

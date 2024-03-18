@@ -4,7 +4,7 @@ import java.util.Objects;
 import java.util.Random;
 
 public class Particle {
-    private final int id;
+    private int id;
     private static int nextId = 0;
     private double x;
     private double y;
@@ -116,6 +116,9 @@ public class Particle {
 
     public int getId() {
         return id;
+    }
+    public void increaseId(){
+        this.id += 1;
     }
 
     public List<Particle> getNeighbours() {
