@@ -115,7 +115,6 @@ public class Grid {
                     for(Particle particle2 : aux.getParticles()) {
                         if (!particle2.equals(particle1)) {
                             if (particle1.isNeighbour(particle2, this)) {
-                                System.out.println("SON VECINOS");
                                 if (!particle1.getNeighbours().contains(particle2)) {
                                     particle1.getNeighbours().add(particle2);
                                 }

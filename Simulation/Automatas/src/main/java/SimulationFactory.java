@@ -56,7 +56,7 @@ public class SimulationFactory {
 
                 SimulatedGrid.CIM(ParticlesList);
                 for(Particle particle : ParticlesList){
-                    System.out.println(particle + ", Time:" + t);
+                    //System.out.println(particle + ", Time:" + t);
 
                     Particle NextParticle = particle.nextParticle(frameSize, noise);
                     NextGrid.addParticle(NextParticle);

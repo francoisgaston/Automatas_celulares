@@ -14,7 +14,6 @@ public class Main {
                 config.getN(), config.getInteractionRadius(), config.getBoundaryConditions(),
                 config.getCircleBoundaryConditions(),config.getTotalTime());
 
-        System.out.println(config.getNCircles() + "----------" + config.getRCircles());
         simulator.simulation(config.getNCircles(), config.getRCircles());
     }
 
