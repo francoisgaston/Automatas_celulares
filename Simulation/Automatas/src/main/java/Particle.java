@@ -70,7 +70,7 @@ public class Particle {
     }
 
     public boolean isNeighbour(Particle particle, Grid SimulatedGrid){
-        double distance = SimulatedGrid.gridDistance(this, particle);
+        double distance = SimulatedGrid.gridDistance(x, y, particle.x, particle.y);
         return interactionRadius>distance;
     }
 

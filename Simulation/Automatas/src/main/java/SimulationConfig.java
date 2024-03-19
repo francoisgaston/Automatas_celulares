@@ -8,8 +8,8 @@ public class SimulationConfig {
     private boolean boundaryConditions;
     private boolean CircleBoundaryConditions;
     private int totalTime;
-    private String PolarizationPath;
-    private String SimulationPath;
+    private int NCircles;
+    private double RCircles;
 
     public SimulationConfig(){
 
@@ -83,21 +83,6 @@ public class SimulationConfig {
         this.totalTime = totalTime;
     }
 
-    public String getPolarizationPath() {
-        return PolarizationPath;
-    }
-
-    public void setPolarizationPath(String polarizationPath) {
-        PolarizationPath = polarizationPath;
-    }
-
-    public String getSimulationPath() {
-        return SimulationPath;
-    }
-
-    public void setSimulationPath(String outputSimulation) {
-        SimulationPath = outputSimulation;
-    }
 
     public boolean getCircleBoundaryConditions() {
         return CircleBoundaryConditions;
@@ -105,5 +90,25 @@ public class SimulationConfig {
 
     public void setCircleBoundaryConditions(boolean circleBoundaryConditions) {
         CircleBoundaryConditions = circleBoundaryConditions;
+    }
+
+    public boolean isCircleBoundaryConditions() {
+        return CircleBoundaryConditions;
+    }
+
+    public int getNCircles() {
+        return NCircles;
+    }
+
+    public void setNCircles(int NCircles) {
+        this.NCircles = NCircles;
+    }
+
+    public double getRCircles() {
+        return RCircles;
+    }
+
+    public void setRCircles(double RCircles) {
+        this.RCircles = RCircles;
     }
 }

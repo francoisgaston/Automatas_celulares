@@ -14,7 +14,8 @@ public class Main {
                 config.getN(), config.getInteractionRadius(), config.getBoundaryConditions(),
                 config.getCircleBoundaryConditions(),config.getTotalTime());
 
-        simulator.simulation(config.getPolarizationPath(), config.getSimulationPath());
+        System.out.println(config.getNCircles() + "----------" + config.getRCircles());
+        simulator.simulation(config.getNCircles(), config.getRCircles());
     }
 
     public static SimulationConfig readConfig(String path){
