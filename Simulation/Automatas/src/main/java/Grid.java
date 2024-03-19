@@ -87,8 +87,8 @@ public class Grid {
         }
     }
 
-    public double gridDistance(Particle particle1, Particle particle2){
-        double directx = Math.abs(particle1.getX() - particle2.getX());
+    public double gridDistance(double x1, double y1, double x2, double y2){
+        double directx = Math.abs(x1 - x2);
         double dx, dy;
         if(directx*2 > L && boundaryConditions){
             dx = (L - directx);
@@ -96,7 +96,7 @@ public class Grid {
             dx = directx;
         }
 
-        double directy = Math.abs(particle1.getY() - particle2.getY());
+        double directy = Math.abs(y1 - y2);
         if(directy*2 > L && boundaryConditions){
             dy = (L - directy);
         }else{
@@ -115,7 +115,6 @@ public class Grid {
                     for(Particle particle2 : aux.getParticles()) {
                         if (!particle2.equals(particle1)) {
                             if (particle1.isNeighbour(particle2, this)) {
-                                System.out.println("SON VECINOS");
                                 if (!particle1.getNeighbours().contains(particle2)) {
                                     particle1.getNeighbours().add(particle2);
                                 }
@@ -128,6 +127,14 @@ public class Grid {
                 }
             }
         }
+    }
+
+    public ArrayList<Circle> generateCircles(int NCircles){
+        ArrayList<Circle> circles = new ArrayList<>();
+        for (int i = 0; i < NCircles; i++) {
+            circles.add(new Circle(L, i));
+        }
+        return circles;
     }
 
 }

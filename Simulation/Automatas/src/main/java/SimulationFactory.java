@@ -4,6 +4,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
@@ -35,14 +36,18 @@ public class SimulationFactory {
         //this.ParticlesList.add(borderParticle);
     }
 
-    public void simulation(String PolarizationPath, String SimulationPath){
+    public void simulation(int NCircles, double RCircles){
         try {
-            FileWriter writer_polarization = new FileWriter(PolarizationPath);
+            FileWriter writer_polarization = new FileWriter("output/DataPolarization.csv");
             writer_polarization.write("tiempo,polarization");
-            FileWriter writer_data = new FileWriter(SimulationPath);
+            FileWriter writer_data = new FileWriter("output/DataSimulation.csv");
             writer_data.write("x,y,vel,angulo,id,time");
+            FileWriter writer_circles = new FileWriter("output/DataCircles.csv");
+            writer_circles.write("id,x,y,counter,total,tiempo");
 
+            ArrayList<Circle> circles = SimulatedGrid.generateCircles(NCircles);
             double VxSum, VySum;
+
             for(int t = 0; t < totalTime; t++){
                 Grid NextGrid = new Grid(SimulatedGrid);
                 List<Particle> NextParticleList = new ArrayList<>();
@@ -51,51 +56,44 @@ public class SimulationFactory {
 
                 SimulatedGrid.CIM(ParticlesList);
                 for(Particle particle : ParticlesList){
+                    //System.out.println(particle + ", Time:" + t);
+
                     Particle NextParticle = particle.nextParticle(frameSize, noise);
                     NextGrid.addParticle(NextParticle);
                     NextParticleList.add(NextParticle);
+
                     VxSum += particle.getSpeed() * Math.sin(particle.getAngle());
                     VySum += particle.getSpeed() * Math.cos(particle.getAngle());
 
-                    System.out.println(particle + ", Time:" + t);
-                    writer_data.write( "\n" + particle.getX() + "," + particle.getY() + "," +
-                            particle.getSpeed() + "," + particle.getAngle() + "," + particle.getId() + "," + t);
+                    for(Circle circle : circles){
+                        if(RCircles > SimulatedGrid.gridDistance(particle.getX(), particle.getY(), circle.getX(), circle.getY()) && !circle.containsParticle(particle)){
+                            circle.addParticle(particle);
+                            circle.increaseCounter();
+                        }
+                    }
+
+                    writer_data.write( "\n" + particle.getX() + "," + particle.getY() + "," + particle.getSpeed() + "," + particle.getAngle() + "," + particle.getId() + "," + t);
                 }
                 SimulatedGrid = NextGrid;
                 ParticlesList = NextParticleList;
 
                 double polarization = Math.sqrt(Math.pow(VxSum, 2) +  Math.pow(VySum, 2))/(ParticlesList.size() * ParticlesList.get(0).getSpeed());
                 writer_polarization.write( "\n" + t + "," + polarization);
+
+                for(Circle circle : circles){
+                    writer_circles.write("\n" + circle.getId() + "," + circle.getX() + "," + circle.getY() + "," + circle.getCounter() + "," + circle.size() + "," + t);
+                    circle.resetCounter();
+                }
             }
+
             writer_data.close();
             writer_polarization.close();
+            writer_circles.close();
 
         } catch(IOException e){
             System.out.println("Error al escribir en el archivo: " + e.getMessage());
         }
     }
 
-    public static void main(String[] args) {
-        SimulationConfig config = readConfig("input/input.json");
-        if(config == null) {
-            return;
-        }
-        SimulationFactory simulator =
-                new SimulationFactory(config.getFrameSize(), config.getNoise(), config.getL(), config.getSpeed(),
-                        config.getN(), config.getInteractionRadius(), config.getBoundaryConditions(),
-                        config.getCircleBoundaryConditions(),config.getTotalTime());
 
-        simulator.simulation(config.getPolarizationPath(), config.getSimulationPath());
-    }
-
-    public static SimulationConfig readConfig(String path){
-        Gson gson = new Gson();
-        SimulationConfig sConfig = null;
-        try (FileReader reader = new FileReader(path)) {
-            sConfig = gson.fromJson(reader, SimulationConfig.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return sConfig;
-    }
 }

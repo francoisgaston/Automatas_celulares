@@ -1,13 +1,13 @@
 {
   "frameSize": 1,
   "noise": 0.01,
-  "L": 15,
+  "L": 200,
   "speed": 1,
-  "N": 4,
-  "interactionRadius": 2,
+  "N": 800,
+  "interactionRadius": 1,
   "boundaryConditions": true,
   "CircleBoundaryConditions": true,
   "totalTime": 20,
-  "PolarizationPath": "output/DataPolarization.csv",
-  "SimulationPath": "output/DataSimulation.csv"
+  "NCircles": 4,
+  "RCircles": 3
 }
