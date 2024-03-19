@@ -4,64 +4,52 @@ import numpy as np
 import json
 import os
 import imageio.v2 as imageio
+from matplotlib.animation import PillowWriter
+from matplotlib.animation import FFMpegWriter
 
 PARTICLES_COORDINATES_FILE = '../Simulation/Automatas/output/DataSimulation.csv'
 CONFIG_FILE = '../Simulation/Automatas/input/input.json'
 CIM_NEIGHBOURS_FILE = '../TP1/cim_output.json'
 IMG_DIR = './img/'
-GIF_FILENAME = './output.gif'
+OUTPUT_FILENAME = 'output/output'
+GIF_FORMAT = 'gif'
+MP4_FORMAT = 'mp4'
 
-def write_output_gif(particles_coords, timeFrames, particle_radius):
-    for tiempo in timeFrames:
-        # Filtrar los datos para el tiempo actual
-        datos_tiempo = particles_coords[particles_coords['time'] == tiempo]
 
-        # Crear una nueva figura
-        plt.figure()
+def draw_moving_particles(particles_coords, timeFrames, particle_radius, L, output_format):
+    if output_format not in ['mp4', 'gif']:
+        raise ValueError('Invalid output format. Please choose mp4 or gif')
 
-        # Graficar la posición de la partícula
-        plt.scatter(datos_tiempo['x'], datos_tiempo['y'], color='blue')
+    if output_format == 'gif':
+        writer = PillowWriter(fps=5)
+    else:
+        writer = FFMpegWriter(fps=5)
 
-        # Graficar la velocidad y el ángulo como flechas
-        for index, fila in datos_tiempo.iterrows():
-            dx = np.cos(fila['angulo']) * fila['vel']
-            dy = np.sin(fila['angulo']) * fila['vel']
-            plt.arrow(fila['x'], fila['y'], dx, dy, head_width=0.2, head_length=0.2, fc='black', ec='black')
+    figure = plt.figure()
 
-        # Configurar los ejes
-        plt.xlim(0, 10)
-        plt.ylim(0, 10)
-        plt.xlabel('Posición X')
-        plt.ylabel('Posición Y')
-        plt.title(f'Gráfico de simulación - Tiempo {tiempo}')
+    with writer.saving(figure, OUTPUT_FILENAME + '.' + output_format, 1000):
+        for timeFrame in timeFrames:
+            current_particle_coords = particles_coords[particles_coords['time'] == timeFrame]
+            plt.scatter(current_particle_coords['x'], current_particle_coords['y'], color='blue')
 
-        # Dibujar círculos para representar las partículas
-        for index, fila in datos_tiempo.iterrows():
-            circulo = plt.Circle((fila['x'], fila['y']), particle_radius, color='red', fill=False)
-            plt.gca().add_artist(circulo)
+            for index, fila in current_particle_coords.iterrows():
+                dx = np.cos(fila['angulo']) * fila['vel']
+                dy = np.sin(fila['angulo']) * fila['vel']
+                plt.arrow(fila['x'], fila['y'], dx, dy, head_width=0.2, head_length=0.2, fc='black', ec='black')
 
-        # Guardar la figura como un archivo PNG
-        plt.savefig(f'img/plot_tiempo_{tiempo}.png')
+            plt.xlim(0, L)
+            plt.ylim(0, L)
+            plt.xlabel('Posición X')
+            plt.ylabel('Posición Y')
+            plt.title(f'Gráfico de simulación - Tiempo {timeFrame}')
 
-        # Cerrar la figura para liberar memoria
-        plt.close()
+            for index, fila in current_particle_coords.iterrows():
+                circulo = plt.Circle((fila['x'], fila['y']), particle_radius, color='red', fill=False)
+                plt.gca().add_artist(circulo)
 
-        # Obtener la lista de archivos PNG en el directorio
-        archivos_png = [f for f in os.listdir(IMG_DIR) if f.endswith('.png')]
-
-        # Ordenar los archivos PNG en base a los tiempos
-        archivos_png.sort(key=lambda x: int(x.split('_')[2].split('.')[0]))
-
-        # Lista para almacenar las imágenes a unir
-        imagenes = []
-
-        # Leer cada archivo PNG y agregarlo a la lista de imágenes
-        for archivo in archivos_png:
-            ruta_imagen = os.path.join(IMG_DIR, archivo)
-            imagenes.append(imageio.imread(ruta_imagen))
-
-        # Escribir las imágenes en un archivo GIF
-        imageio.mimsave(GIF_FILENAME, imagenes, duration=1000)  # Duración de cada imagen en segundos
+            writer.grab_frame()
+            # Clear figure
+            plt.clf()
 
 
 def read_config_file(file_path):
@@ -70,9 +58,16 @@ def read_config_file(file_path):
     return config_data
 
 
+def delete_images():
+    for file_name in os.listdir(IMG_DIR):
+        file_path = os.path.join(IMG_DIR, file_name)
+        if os.path.isfile(file_path):
+            os.remove(file_path)
+
+
 if __name__ == '__main__':
     config = read_config_file(CONFIG_FILE)
     particles_coords = pd.read_csv(PARTICLES_COORDINATES_FILE)
     timeFrames = particles_coords['time'].unique()
     particle_radius = config['interactionRadius']
-    write_output_gif(particles_coords, timeFrames, particle_radius)
+    draw_moving_particles(particles_coords, timeFrames, particle_radius, config['L'], MP4_FORMAT)
