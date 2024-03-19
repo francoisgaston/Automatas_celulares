@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import json
 import os
-import imageio.v2 as imageio
+import cv2
 from matplotlib.animation import PillowWriter
 from matplotlib.animation import FFMpegWriter
 
@@ -14,6 +14,31 @@ IMG_DIR = './img/'
 OUTPUT_FILENAME = 'output/output'
 GIF_FORMAT = 'gif'
 MP4_FORMAT = 'mp4'
+WIDTH, HEIGHT = 640, 480
+
+
+def visualize_moving_particles(particles_coords, timeFrames, particle_radius, L):
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+    video_writer = cv2.VideoWriter(OUTPUT_FILENAME + '.' + MP4_FORMAT, fourcc, 5.0, (L, L))
+    for timeFrame in timeFrames:
+        current_particle_coords = particles_coords[particles_coords['time'] == timeFrame]
+        frame = np.zeros((L, L, 3), dtype=np.uint8)
+
+        for index, fila in current_particle_coords.iterrows():
+            dx = np.cos(fila['angulo']) * fila['vel']
+            dy = np.sin(fila['angulo']) * fila['vel']
+            start_pos = [int(fila['x']), int(fila['y'])]
+            finish_pos = [int(fila['x']) + int(dx), int(fila['y']) + int(dy)]
+            cv2.arrowedLine(frame, tuple(start_pos), tuple(finish_pos), (0, 255, 0), 1)
+            cv2.circle(frame, tuple(start_pos), particle_radius, (0, 0, 255), 1)
+
+        for index, fila in current_particle_coords.iterrows():
+            current_pos = [int(fila['x']), int(fila['y'])]
+            cv2.circle(frame, tuple(current_pos), particle_radius//2, (255, 0, 0), -1)
+
+        video_writer.write(frame)
+    video_writer.release()
+    cv2.destroyAllWindows()
 
 
 def draw_moving_particles(particles_coords, timeFrames, particle_radius, L, output_format):
@@ -70,4 +95,10 @@ if __name__ == '__main__':
     particles_coords = pd.read_csv(PARTICLES_COORDINATES_FILE)
     timeFrames = particles_coords['time'].unique()
     particle_radius = config['interactionRadius']
-    draw_moving_particles(particles_coords, timeFrames, particle_radius, config['L'], MP4_FORMAT)
+
+    # Matplotlib #
+    #draw_moving_particles(particles_coords, timeFrames, particle_radius, config['L'], MP4_FORMAT)
+
+    # OpenCV #
+    # L values requires to be > ~500. If lower, video file will be corrupted.
+    visualize_moving_particles(particles_coords, timeFrames, particle_radius, config['L'])
