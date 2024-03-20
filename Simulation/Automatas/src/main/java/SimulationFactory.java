@@ -31,9 +31,12 @@ public class SimulationFactory {
             this.ParticlesList.add(auxParticle);
         }
         //Particle 1000
-        //Particle borderParticle = new Particle(0.1, 0.1, radiusParticle);
+        //Particle borderParticle = new Particle(1, 5, 1, 0, 1, 1);
         //this.SimulatedGrid.addParticle(borderParticle);
         //this.ParticlesList.add(borderParticle);
+        //Particle borderParticle2 = new Particle(5.5, 5, 1, Math.PI, 1, 2);
+        //this.SimulatedGrid.addParticle(borderParticle2);
+        //this.ParticlesList.add(borderParticle2);
     }
 
     public void simulation(int NCircles, double RCircles){

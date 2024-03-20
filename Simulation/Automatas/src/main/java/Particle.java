@@ -46,11 +46,11 @@ public class Particle {
     }
 
     public Particle nextParticle(double FrameSize, double noise){
-        double new_x = x + FrameSize * speed * Math.cos(angle);
-        double new_y = y + FrameSize * speed * Math.sin(angle);
-
         double new_angle = new_angle();
         new_angle += random.nextDouble(2*noise) - noise;
+
+        double new_x = x + FrameSize * speed * Math.cos(new_angle);
+        double new_y = y + FrameSize * speed * Math.sin(new_angle);
 
         return new Particle(new_x, new_y, speed, new_angle, interactionRadius, id);
     }
@@ -61,7 +61,7 @@ public class Particle {
 
         for(Particle particle : neighbours){
             sinProm += Math.sin(particle.angle);
-            cosProm += Math.sin(particle.angle);
+            cosProm += Math.cos(particle.angle);
         }
 
         sinProm = sinProm/(neighbours.size()+1);
