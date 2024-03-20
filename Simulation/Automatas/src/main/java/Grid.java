@@ -28,7 +28,7 @@ public class Grid {
 
     public boolean addParticle(Particle particle){
         if((particle.getX() < 0 || particle.getX() > L || particle.getY() < 0 || particle.getY() > L) && CircleBoundaryConditions){
-            particle.increaseId();
+            particle.newId();
         }
 
         particle.setX((particle.getX()+L)%L);

@@ -12,8 +12,6 @@ public class Particle {
     private double angle;
     private double interactionRadius;
     private final List<Particle> neighbours;
-    private static final Random random = new Random();
-
 
     public Particle(double x, double y, double speed, double angle, double interactionRadius) {
         this.id = nextId++;
@@ -37,20 +35,21 @@ public class Particle {
 
     public Particle(double L, double speed, double interactionRadius){
         this.id = nextId++;
-        this.x = random.nextDouble(L);
-        this.y = random.nextDouble(L);
+        this.x = Math.random() * L;
+        this.y = Math.random() * L;
         this.speed = speed;
-        this.angle = random.nextDouble(2* Math.PI);
+        this.angle = Math.random() * 2 * Math.PI;
+        //random.nextDouble(2* Math.PI);
         this.interactionRadius = interactionRadius;
         this.neighbours = new ArrayList<>();
     }
 
     public Particle nextParticle(double FrameSize, double noise){
-        double new_angle = new_angle();
-        new_angle += random.nextDouble(2*noise) - noise;
+        double new_x = x + FrameSize * speed * Math.cos(angle);
+        double new_y = y + FrameSize * speed * Math.sin(angle);
 
-        double new_x = x + FrameSize * speed * Math.cos(new_angle);
-        double new_y = y + FrameSize * speed * Math.sin(new_angle);
+        double new_angle = new_angle();
+        new_angle +=  (noise)*(Math.random() - 0.5);
 
         return new Particle(new_x, new_y, speed, new_angle, interactionRadius, id);
     }
@@ -117,8 +116,8 @@ public class Particle {
     public int getId() {
         return id;
     }
-    public void increaseId(){
-        this.id += 1;
+    public void newId(){
+        this.id = nextId++;
     }
 
     public List<Particle> getNeighbours() {
@@ -130,12 +129,12 @@ public class Particle {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Particle particle = (Particle) o;
-        return Double.compare(particle.x, x) == 0 && Double.compare(particle.y, y) == 0 && id == particle.id;
+        return id == particle.id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(x, y, id);
+        return Objects.hash(id);
     }
 
     @Override

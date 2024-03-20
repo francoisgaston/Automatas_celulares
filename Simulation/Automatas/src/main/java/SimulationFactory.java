@@ -39,14 +39,17 @@ public class SimulationFactory {
         //this.ParticlesList.add(borderParticle2);
     }
 
-    public void simulation(int NCircles, double RCircles){
+    public void simulation(int NCircles, double RCircles, double L, int N, double noise){
         try {
-            FileWriter writer_polarization = new FileWriter("output/DataPolarization.csv");
-            writer_polarization.write("tiempo,polarization");
             FileWriter writer_data = new FileWriter("output/DataSimulation.csv");
             writer_data.write("x,y,vel,angulo,id,time");
-            FileWriter writer_circles = new FileWriter("output/DataCircles.csv");
-            writer_circles.write("id,x,y,counter,total,tiempo");
+
+            double density = N / (L * L);
+            FileWriter writer_polarization = new FileWriter("output/Polarization_" + N + "_" + noise  + ".csv");
+            writer_polarization.write("tiempo,polarization,N,Density,Noise");
+
+            FileWriter writer_circles = new FileWriter("output/Circles_" + N + "_" + noise + ".csv");
+            writer_circles.write("id,x,y,counter,total,tiempo,noise,N");
 
             ArrayList<Circle> circles = SimulatedGrid.generateCircles(NCircles);
             double VxSum, VySum;
@@ -81,10 +84,10 @@ public class SimulationFactory {
                 ParticlesList = NextParticleList;
 
                 double polarization = Math.sqrt(Math.pow(VxSum, 2) +  Math.pow(VySum, 2))/(ParticlesList.size() * ParticlesList.get(0).getSpeed());
-                writer_polarization.write( "\n" + t + "," + polarization);
+                writer_polarization.write( "\n" + t + "," + polarization + "," + N + "," + density + "," + noise);
 
                 for(Circle circle : circles){
-                    writer_circles.write("\n" + circle.getId() + "," + circle.getX() + "," + circle.getY() + "," + circle.getCounter() + "," + circle.size() + "," + t);
+                    writer_circles.write("\n" + circle.getId() + "," + circle.getX() + "," + circle.getY() + "," + circle.getCounter() + "," + circle.size() + "," + t + "," + noise + "," + N);
                     circle.resetCounter();
                 }
             }

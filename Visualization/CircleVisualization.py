@@ -1,20 +1,29 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import glob
 
-# Cargar los datos desde el archivo CSV
-df = pd.read_csv('../Simulation/Automatas/output/DataCircles.csv')
+# Directorio donde se encuentran los archivos CSV
+directory = "../Simulation/Automatas/output/"
 
-# Agrupar por 'id' y trazar las líneas para cada uno
-fig, ax = plt.subplots()
-for key, grp in df.groupby(['id']):
-    ax.plot(grp['tiempo'], grp['counter'], label=f'ID {key}')
+# Encuentra todos los archivos CSV que coinciden con el patrón
+files = glob.glob(directory + "Circles_*_*.csv")
 
-# Etiquetas y título
+# Leer y combinar todos los archivos CSV
+dfs = []
+for file in files:
+    dfs.append(pd.read_csv(file))
+df = pd.concat(dfs)
+
+# Grafica el counter en función del tiempo, separado por noise
+colors = ['b', 'g', 'r', 'c', 'm', 'y', 'k']
+noise_values = df['noise'].unique()
+
+for idx, noise in enumerate(noise_values):
+    data = df[df['noise'] == noise]
+    plt.scatter(data['tiempo'], data['counter'], c=colors[idx], label=f"Noise {noise}")
+
 plt.xlabel('Tiempo')
 plt.ylabel('Counter')
-plt.title('Counter vs Tiempo para cada ID')
+plt.title('Counter vs Tiempo')
 plt.legend()
-plt.grid(True)
-
-# Mostrar el gráfico
 plt.show()

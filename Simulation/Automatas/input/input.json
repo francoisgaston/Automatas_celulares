@@ -1,13 +1,13 @@
 {
-  "frameSize": 1,
-  "noise": 0.01,
-  "L": 200,
-  "speed": 1,
-  "N": 800,
+  "noise": 3,
+  "L": 5,
+  "N": 300,
+  "speed": 0.03,
   "interactionRadius": 1,
   "boundaryConditions": true,
-  "CircleBoundaryConditions": true,
-  "totalTime": 20,
+  "CircleBoundaryConditions": false,
+  "frameSize": 1,
+  "totalTime": 1000,
   "NCircles": 4,
-  "RCircles": 3
+  "RCircles": 1
 }
