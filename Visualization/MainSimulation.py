@@ -3,56 +3,53 @@ import matplotlib.pyplot as plt
 import numpy as np
 import json
 import os
+import sys
 import cv2
-from matplotlib.animation import PillowWriter
 from matplotlib.animation import FFMpegWriter
 
 PARTICLES_COORDINATES_FILE = '../Simulation/Automatas/output/DataSimulation.csv'
+CIRCLES_COORDINATES_FILE = '../Simulation/Automatas/output/DataCircles.csv'
 CONFIG_FILE = '../Simulation/Automatas/input/input.json'
 CIM_NEIGHBOURS_FILE = '../TP1/cim_output.json'
 IMG_DIR = './img/'
-OUTPUT_FILENAME = 'output/output'
+OPENCV_OUTPUT_FILENAME = 'output/open_cv_output'
+MATPLOTLIB_OUTPUT_FILENAME = 'output/matplotlib_output'
+BACKGROUND_FILE = '/img/white_image.jpeg'
 GIF_FORMAT = 'gif'
 MP4_FORMAT = 'mp4'
 WIDTH, HEIGHT = 640, 480
+SCALE_FACTOR = 50
+ANGLE_TO_RGB = 255 / (np.pi*2)
+NORMAL_MODE = 'normal'
+RAINBOW_MODE = 'rainbow'
+GRAY_MODE = 'gray'
 
 
-def visualize_moving_particles(particles_coords, timeFrames, particle_radius, L):
-    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-    video_writer = cv2.VideoWriter(OUTPUT_FILENAME + '.' + MP4_FORMAT, fourcc, 5.0, (L, L))
-    for timeFrame in timeFrames:
-        current_particle_coords = particles_coords[particles_coords['time'] == timeFrame]
-        frame = np.zeros((L, L, 3), dtype=np.uint8)
-
-        for index, fila in current_particle_coords.iterrows():
-            dx = np.cos(fila['angulo']) * fila['vel']
-            dy = np.sin(fila['angulo']) * fila['vel']
-            start_pos = [int(fila['x']), int(fila['y'])]
-            finish_pos = [int(fila['x']) + int(dx), int(fila['y']) + int(dy)]
-            cv2.arrowedLine(frame, tuple(start_pos), tuple(finish_pos), (0, 255, 0), 1)
-            cv2.circle(frame, tuple(start_pos), particle_radius, (0, 0, 255), 1)
-
-        for index, fila in current_particle_coords.iterrows():
-            current_pos = [int(fila['x']), int(fila['y'])]
-            cv2.circle(frame, tuple(current_pos), particle_radius//2, (255, 0, 0), -1)
-
-        video_writer.write(frame)
-    video_writer.release()
-    cv2.destroyAllWindows()
-
-
-def draw_moving_particles(particles_coords, timeFrames, particle_radius, L, output_format):
-    if output_format not in ['mp4', 'gif']:
-        raise ValueError('Invalid output format. Please choose mp4 or gif')
-
-    if output_format == 'gif':
-        writer = PillowWriter(fps=5)
+def angle_to_rgb(angle, mode):
+    base_value = 100
+    color_coefficient = 0.4
+    if mode == GRAY_MODE:
+        red = color_coefficient * (angle * ANGLE_TO_RGB) + base_value
+        green = color_coefficient * (angle * ANGLE_TO_RGB) + base_value
+        blue = color_coefficient * (angle * ANGLE_TO_RGB) + base_value
+    elif mode == RAINBOW_MODE:
+        red = np.clip(255 * np.abs(np.sin(angle)), 0, 255)
+        green = np.clip(255 * np.abs(np.sin(angle + np.pi)), 0, 255)
+        blue = np.clip(255 * np.abs(np.cos(angle + np.pi)), 0, 255)
     else:
-        writer = FFMpegWriter(fps=5)
+        red = 0
+        green = 0
+        blue = 255
+
+    return int(blue), int(green), int(red)
+
+
+def complete_visualization_matplotlib(particles_coords, timeFrames, particle_radius, L, amount_circles, circle_radius, circle_coords):
+    writer = FFMpegWriter(fps=5)
 
     figure = plt.figure()
 
-    with writer.saving(figure, OUTPUT_FILENAME + '.' + output_format, 1000):
+    with writer.saving(figure, MATPLOTLIB_OUTPUT_FILENAME + '.' + MP4_FORMAT, 1000):
         for timeFrame in timeFrames:
             current_particle_coords = particles_coords[particles_coords['time'] == timeFrame]
             plt.scatter(current_particle_coords['x'], current_particle_coords['y'], color='blue')
@@ -68,13 +65,44 @@ def draw_moving_particles(particles_coords, timeFrames, particle_radius, L, outp
             plt.ylabel('Posición Y')
             plt.title(f'Gráfico de simulación - Tiempo {timeFrame}')
 
-            for index, fila in current_particle_coords.iterrows():
-                circulo = plt.Circle((fila['x'], fila['y']), particle_radius, color='red', fill=False)
+            for index, fila in circle_coords.iterrows():
+                if index > amount_circles:
+                    break
+                circulo = plt.Circle((fila['x'], fila['y']), circle_radius, color='green', fill=False)
                 plt.gca().add_artist(circulo)
 
             writer.grab_frame()
             # Clear figure
             plt.clf()
+
+
+def complete_visualization_opencv(particles_coords, timeFrames, particle_radius, L, amount_circles, circle_radius, circle_coords, mode):
+
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+    video_writer = cv2.VideoWriter(OPENCV_OUTPUT_FILENAME + '.' + MP4_FORMAT, fourcc, 10.0, (L*SCALE_FACTOR, L*SCALE_FACTOR))
+    for timeFrame in timeFrames:
+        current_particle_coords = particles_coords[particles_coords['time'] == timeFrame]
+        frame = np.zeros((L*SCALE_FACTOR, L*SCALE_FACTOR, 3), dtype=np.uint8)
+
+        for index, fila in current_particle_coords.iterrows():
+            dx = np.cos(fila['angulo']) * fila['vel'] * SCALE_FACTOR
+            dy = np.sin(fila['angulo']) * fila['vel'] * SCALE_FACTOR
+            start_pos = [int(fila['x'] * SCALE_FACTOR), int(fila['y'] * SCALE_FACTOR)]
+            finish_pos = [int(SCALE_FACTOR * fila['x']) + int(dx), int(SCALE_FACTOR * fila['y']) + int(dy)]
+            cv2.arrowedLine(frame, tuple(start_pos), tuple(finish_pos), (angle_to_rgb(fila['angulo'], mode)), 5, cv2.LINE_AA)
+            current_pos = [int(fila['x'] * SCALE_FACTOR), int(fila['y'] * SCALE_FACTOR)]
+            cv2.circle(frame, tuple(current_pos), particle_radius * SCALE_FACTOR, (angle_to_rgb(fila['angulo'], mode)), -1)
+
+        if mode == NORMAL_MODE:
+            for index, fila in circle_coords.iterrows():
+                if index > amount_circles:
+                    break
+                current_pos = [int(fila['x'] * SCALE_FACTOR), int(fila['y'] * SCALE_FACTOR)]
+                cv2.circle(frame, tuple(current_pos), circle_radius * SCALE_FACTOR, (0, 255, 0), 5)
+
+        video_writer.write(frame)
+    video_writer.release()
+    cv2.destroyAllWindows()
 
 
 def read_config_file(file_path):
@@ -90,15 +118,31 @@ def delete_images():
             os.remove(file_path)
 
 
+def parse_console_command(argv):
+    if len(argv) == 1 or argv[1] == NORMAL_MODE:
+        return NORMAL_MODE
+    elif argv[1] == RAINBOW_MODE:
+        return RAINBOW_MODE
+    else:
+        return GRAY_MODE
+
+
 if __name__ == '__main__':
     config = read_config_file(CONFIG_FILE)
     particles_coords = pd.read_csv(PARTICLES_COORDINATES_FILE)
+    circle_coords = pd.read_csv(CIRCLES_COORDINATES_FILE)
     timeFrames = particles_coords['time'].unique()
     particle_radius = config['interactionRadius']
-
-    # Matplotlib #
-    #draw_moving_particles(particles_coords, timeFrames, particle_radius, config['L'], MP4_FORMAT)
+    visualization_mode = parse_console_command(sys.argv)
 
     # OpenCV #
-    # L values requires to be > ~500. If lower, video file will be corrupted.
-    visualize_moving_particles(particles_coords, timeFrames, particle_radius, config['L'])
+    print('Drawing particles with opencv...')
+    complete_visualization_opencv(particles_coords, timeFrames, particle_radius, config['L'], config['NCircles'],
+                           config['RCircles'], circle_coords, visualization_mode)
+    print('DONE!')
+
+    # Matplotlib #
+    #print('Drawing particles with matplotlib...')
+    #complete_visualization_matplotlib(particles_coords, timeFrames, particle_radius, config['L'], config['NCircles'],
+                           #config['RCircles'], circle_coords)
+    #print('DONE!')
