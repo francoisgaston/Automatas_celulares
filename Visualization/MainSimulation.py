@@ -33,9 +33,9 @@ def angle_to_rgb(angle, mode):
         green = color_coefficient * (angle * ANGLE_TO_RGB) + base_value
         blue = color_coefficient * (angle * ANGLE_TO_RGB) + base_value
     elif mode == RAINBOW_MODE:
-        red = np.clip(255 * np.abs(np.sin(angle)), 0, 255)
-        green = np.clip(255 * np.abs(np.sin(angle + np.pi)), 0, 255)
-        blue = np.clip(255 * np.abs(np.cos(angle + np.pi)), 0, 255)
+        red = (255 * np.abs(np.cos(angle))) % 255
+        green = (255 * np.abs(np.sin(angle + np.pi))) % 255
+        blue = (255 * np.abs(np.cosh(angle))) % 255
     else:
         red = 0
         green = 0
