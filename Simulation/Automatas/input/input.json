@@ -1,11 +1,9 @@
 {
-  "frameSize": 1,
   "noise": 0.1,
   "L": 100,
   "speed": 5,
   "N": 30,
   "interactionRadius": 1,
-  "boundaryConditions": true,
   "CircleBoundaryConditions": true,
   "totalTime": 50,
   "NCircles": 4,

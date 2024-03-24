@@ -111,7 +111,7 @@ def plot_save_final(polarized_df, tiempo_X):
     desviacion_estandar_resultados = resultados_agrupados.std()
 
     # Escribir los datos en un archivo CSV
-    promedio_desviacion_df = pd.DataFrame({'Noise': promedio_resultados.index, 'Promedio_Resultado': promedio_resultados, 'Desviacion_Estandar': desviacion_estandar_resultados})
+    promedio_desviacion_df = pd.DataFrame({'Density': (promedio_resultados.index / (L * L)) , 'Promedio_Resultado': promedio_resultados, 'Desviacion_Estandar': desviacion_estandar_resultados})
     promedio_desviacion_df.to_csv(AVG_PATH + 'Density_' + str(L) + "_" + str(NOISE) + '.csv', index=False)
     print("---------------------------------------")
     print("Datos guardados en: " + AVG_PATH + 'Density_' + str(L) + "_" + str(NOISE) + '.csv')

@@ -5,9 +5,9 @@ import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) {
-        NoiseMultiSimulation();
         //Simulation();
-        //DensityMultiSimulation();
+        //NoiseMultiSimulation();
+        DensityMultiSimulation();
     }
 
     public static void Simulation(){

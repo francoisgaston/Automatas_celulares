@@ -15,7 +15,7 @@ def combinar():
             # Cargar el archivo CSV en un DataFrame
             df = pd.read_csv(os.path.join(avg_path, archivo))
             # Agregar una columna para el nombre del archivo para distinguir los datos
-            df['Archivo'] = os.path.split("/")[0]
+            df['Archivo'] = os.path.splitext(archivo)[0]
             # Agregar los datos ala lista
             datos_combinados.append(df)
 
@@ -29,11 +29,11 @@ def plot_final(combined_df):
     plt.figure(figsize=(10, 6))
 
     for nombre_archivo, datos in combined_df.groupby('Archivo'):
-        plt.errorbar(datos['Noise'], datos['Promedio_Resultado'], yerr=datos['Desviacion_Estandar'], fmt='o', label=nombre_archivo)
+        plt.errorbar(datos['Density'], datos['Promedio_Resultado'], yerr=datos['Desviacion_Estandar'], fmt='o', label=nombre_archivo)
 
-    plt.xlabel('Ruido')
+    plt.xlabel('Density')
     plt.ylabel('Polarización Promedio')
-    plt.title('Polarización Promedio vs Ruido')
+    plt.title('Polarización Promedio vs Density')
     plt.legend()
     plt.grid(True)
     plt.show()
