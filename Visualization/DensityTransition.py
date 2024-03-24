@@ -10,11 +10,16 @@ import seaborn as sns
 # DATOS A CAMBIAR SEGÚN EL CASO DE ESTUDIO
 # ---------------------------------------------------
 OUTPUT_PATH = '../Simulation/Automatas/output/'
-AVG_PATH = './avg/'
+AVG_PATH = './output/'
 L = 20
 NOISE = 1.0
+T_ESTACIONARIO = 500
 # ---------------------------------------------------
 
+def custom_palette_with_skip(skip_color, polarized_df):
+    palette = sns.color_palette("husl", len(polarized_df['N'].unique()))
+    new_palette = [color for color in palette if color != sns.color_palette()[skip_color]]
+    return new_palette
 
 def merge_csv_and_json(csv_file, json_file):
     # Leer el JSON
@@ -30,9 +35,9 @@ def merge_csv_and_json(csv_file, json_file):
     
     return df
 
-def merge_all_files(csv_dir, NOISE, L):
+def merge_all_files():
     # Obtener lista de archivos en los directorios
-    csv_files = os.listdir(csv_dir)
+    csv_files = os.listdir(OUTPUT_PATH)
     filter_start = 'SimulationData_'
     filter_end = str(L) + "_" + str(NOISE) + '.csv'
     
@@ -40,8 +45,8 @@ def merge_all_files(csv_dir, NOISE, L):
     combined_data = pd.DataFrame()
     for csv_file in csv_files:
         if csv_file.endswith(filter_end) and csv_file.startswith(filter_start):
-            print(csv_file)
-            csv_path = os.path.join(csv_dir, csv_file)
+            print("Procesando: " + csv_file)
+            csv_path = os.path.join(OUTPUT_PATH, csv_file)
             json_path = csv_path.replace("SimulationData_", "StateData_").replace(".csv", ".json")
             df = merge_csv_and_json(csv_path, json_path)
             combined_data = pd.concat([combined_data, df], ignore_index=True)
@@ -79,10 +84,14 @@ def calculate_polarization(combined_df):
     # Mostrar el resultado
     return result
 
-def plot_transition(polarized_df):
-    # Graficar usando seaborn
-    sns.set(style="whitegrid")
-    sns.lineplot(data=polarized_df, x="time", y="resultado", hue="N", marker='o')
+def plot_transition(polarized_df, tiempo_X):
+    # Definir colores personalizados para los diferentes niveles de ruido
+    custom_palette = custom_palette_with_skip(1, polarized_df)
+
+    sns.lineplot(data=polarized_df, x="time", y="resultado", hue="N", palette=custom_palette)
+
+    # Agregar una línea vertical roja en el tiempo 200
+    plt.axvline(x=tiempo_X, color='red', linestyle='--', linewidth=2)
 
     # Añadir título y etiquetas de ejes
     plt.title('Resultado vs Tiempo por Nivel de Ruido')
@@ -92,7 +101,7 @@ def plot_transition(polarized_df):
     # Mostrar la gráfica
     plt.show()
 
-def plot_save_final(polarized_df, tiempo_X, NOISE, L):
+def plot_save_final(polarized_df, tiempo_X):
     # Filtrar el DataFrame para los tiempos mayores o iguales a X
     df_tiempo_X = polarized_df[polarized_df['time'] >= tiempo_X]
 
@@ -101,39 +110,28 @@ def plot_save_final(polarized_df, tiempo_X, NOISE, L):
     promedio_resultados = resultados_agrupados.mean()
     desviacion_estandar_resultados = resultados_agrupados.std()
 
-    # Crear un gráfico de barras
-    plt.bar(promedio_resultados.index, promedio_resultados, yerr=desviacion_estandar_resultados, capsize=5)
-    plt.xlabel('N')
-    plt.ylabel('Promedio de Resultado')
-    plt.title('Promedio de Resultado vs. N para time >= {}'.format(tiempo_X))
-    plt.xticks(rotation=45)
-    plt.tight_layout()
-
-    # Mostrar el gráfico
-    plt.show()
-
     # Escribir los datos en un archivo CSV
     promedio_desviacion_df = pd.DataFrame({'Noise': promedio_resultados.index, 'Promedio_Resultado': promedio_resultados, 'Desviacion_Estandar': desviacion_estandar_resultados})
     promedio_desviacion_df.to_csv(AVG_PATH + 'Density_' + str(L) + "_" + str(NOISE) + '.csv', index=False)
+    print("---------------------------------------")
+    print("Datos guardados en: " + AVG_PATH + 'Density_' + str(L) + "_" + str(NOISE) + '.csv')
 
 
 def main():
     # Combinar todos los archivos CSV y JSON
-    combined_df = merge_all_files(OUTPUT_PATH, NOISE, L)
+    combined_df = merge_all_files()
 
     # Calcular la polarización
     polarized_df = calculate_polarization(combined_df)
 
-    print(polarized_df)
+    # Definir el tiempo de corte
+    tiempo_X = T_ESTACIONARIO
 
     # Graficar la transición de los resultados
-    plot_transition(polarized_df)
-    
-    # Definir el tiempo de corte
-    tiempo_X = 2
+    plot_transition(polarized_df, tiempo_X)
 
     # Graficar y guardar el promedio y la desviación estándar de los resultados para tiempos mayores o iguales a X
-    plot_save_final(polarized_df, tiempo_X, NOISE, L)
+    plot_save_final(polarized_df, tiempo_X)
 
 
 if __name__ == "__main__":

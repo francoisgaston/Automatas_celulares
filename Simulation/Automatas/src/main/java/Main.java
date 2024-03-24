@@ -45,7 +45,7 @@ public class Main {
             return;
         }
 
-        for(int N = 10; N <= 4000; N+=400){
+        for(int N = 10; N <= 4020; N+=800){
             SimulationFactory simulator =
                     new SimulationFactory(config.getFrameSize(), config.getNoise(), config.getL(), config.getSpeed(),
                             N, config.getInteractionRadius(), config.getBoundaryConditions(),
