@@ -5,9 +5,17 @@ import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) {
+        // Realizar solo una simulación para realizar una animación
         //Simulation();
+
+        // Realizar simulaciones para luego analizar variación de polarizacion vs tiempo segun el nivel de ruido
         //NoiseMultiSimulation();
-        DensityMultiSimulation();
+
+        // Realizar simulaciones para luego analizar variación de polarizacion vs tiempo segun la densidad (variando numero de particulas)
+        //DensityMultiSimulation();
+
+        // Realizar simulaciones para luego analizar comportamiento en funcion a 4 circulos.
+        CircleNoiseMultiSimulation();
     }
 
     public static void Simulation(){
@@ -52,6 +60,22 @@ public class Main {
                             config.getCircleBoundaryConditions(),config.getTotalTime());
 
             simulator.simulation(config.getNCircles(), config.getRCircles(), config.getL(), N);
+        }
+    }
+
+    public static void CircleNoiseMultiSimulation(){
+        SimulationConfig config = readConfig("input/CircleNoiseInput.json");
+        if(config == null) {
+            return;
+        }
+
+        for(double noise = 0; noise <= 5; noise+=1){
+            SimulationFactory simulator =
+                    new SimulationFactory(1, noise, config.getL(), config.getSpeed(),
+                            config.getN(), config.getInteractionRadius(), true,
+                            config.getCircleBoundaryConditions(),config.getTotalTime());
+
+            simulator.simulation(config.getNCircles(), config.getRCircles(), config.getL(), config.getN());
         }
     }
 

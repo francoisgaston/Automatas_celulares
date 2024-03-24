@@ -20,7 +20,7 @@ noise_values = df['noise'].unique()
 
 for idx, noise in enumerate(noise_values):
     data = df[df['noise'] == noise]
-    plt.scatter(data['tiempo'], data['counter'], c=colors[idx], label=f"Noise {noise}")
+    plt.scatter(data['tiempo'], data['total'], c=colors[idx], label=f"Noise {noise}")
 
 plt.xlabel('Tiempo')
 plt.ylabel('Counter')
