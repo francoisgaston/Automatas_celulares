@@ -1,18 +1,30 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import glob
 
-# Leer el archivo CSV
-df = pd.read_csv("../Simulation/Automatas/output/DataPolarization.csv")
+# Directorio donde se encuentran los archivos CSV
+directory = "../Simulation/Automatas/output/extra/"
 
-# Extraer los datos de tiempo y polarización
-tiempo = df['tiempo']
-polarization = df['polarization']
+# Encuentra todos los archivos CSV que coinciden con el patrón
+files = glob.glob(directory + "Polarization_100_*.csv")
 
-# Graficar
-plt.figure(figsize=(10, 6))
-plt.plot(tiempo, polarization, marker='o', linestyle='-')
-plt.title('Gráfico de Polarización en Función del Tiempo')
+# Leer y combinar todos los archivos CSV
+dfs = []
+for file in files:
+    dfs.append(pd.read_csv(file))
+df = pd.concat(dfs)
+
+# Grafica el counter en función del tiempo, separado por noise
+colors = ['b', 'g', 'r', 'c', 'm', 'y', 'k', 'y', 'k', 'y', 'y']
+noise_values = df['Noise'].unique()
+
+for idx, noise in enumerate(noise_values):
+    data = df[df['Noise'] == noise]
+    plt.scatter(data['tiempo'], data['polarization'], c=colors[idx], label=f"Noise {noise}")
+
 plt.xlabel('Tiempo')
-plt.ylabel('Polarización')
-plt.grid(True)
+plt.ylabel('polarization')
+plt.title('polarization vs Tiempo')
+plt.legend()
 plt.show()
+

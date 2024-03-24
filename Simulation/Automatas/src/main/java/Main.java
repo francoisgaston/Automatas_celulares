@@ -5,16 +5,54 @@ import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) {
+        NoiseMultiSimulation();
+        //Simulation();
+        //DensityMultiSimulation();
+    }
+
+    public static void Simulation(){
         SimulationConfig config = readConfig("input/input.json");
         if(config == null) {
             return;
         }
         SimulationFactory simulator =
                 new SimulationFactory(config.getFrameSize(), config.getNoise(), config.getL(), config.getSpeed(),
-                config.getN(), config.getInteractionRadius(), config.getBoundaryConditions(),
-                config.getCircleBoundaryConditions(),config.getTotalTime());
+                        config.getN(), config.getInteractionRadius(), config.getBoundaryConditions(),
+                        config.getCircleBoundaryConditions(),config.getTotalTime());
 
-        simulator.simulation(config.getNCircles(), config.getRCircles(), config.getL(), config.getN(), config.getNoise());
+        simulator.simulation(config.getNCircles(), config.getRCircles(), config.getL(), config.getN());
+    }
+
+    public static void NoiseMultiSimulation(){
+        SimulationConfig config = readConfig("input/NoiseInput.json");
+        if(config == null) {
+            return;
+        }
+
+        for(double noise = 0; noise <= 5; noise+=0.5){
+            SimulationFactory simulator =
+                    new SimulationFactory(config.getFrameSize(), noise, config.getL(), config.getSpeed(),
+                            config.getN(), config.getInteractionRadius(), config.getBoundaryConditions(),
+                            config.getCircleBoundaryConditions(),config.getTotalTime());
+
+            simulator.simulation(config.getNCircles(), config.getRCircles(), config.getL(), config.getN());
+        }
+    }
+
+    public static void DensityMultiSimulation(){
+        SimulationConfig config = readConfig("input/DensityInput.json");
+        if(config == null) {
+            return;
+        }
+
+        for(int N = 10; N <= 4000; N+=400){
+            SimulationFactory simulator =
+                    new SimulationFactory(config.getFrameSize(), config.getNoise(), config.getL(), config.getSpeed(),
+                            N, config.getInteractionRadius(), config.getBoundaryConditions(),
+                            config.getCircleBoundaryConditions(),config.getTotalTime());
+
+            simulator.simulation(config.getNCircles(), config.getRCircles(), config.getL(), N);
+        }
     }
 
     public static SimulationConfig readConfig(String path){
@@ -27,4 +65,5 @@ public class Main {
         }
         return sConfig;
     }
+
 }

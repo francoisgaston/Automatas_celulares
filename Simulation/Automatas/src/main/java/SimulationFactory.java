@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import org.json.JSONObject;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class SimulationFactory {
     private List<Particle> ParticlesList;
@@ -16,6 +19,9 @@ public class SimulationFactory {
     private final double noise;
 
     public SimulationFactory(int frameSize, double noise, double L, double speed, int N, double interactionRadius, boolean boundaryConditions, boolean CircleBoundaryConditions, int totalTime) {
+
+        writeStatus(noise, L, speed, N, interactionRadius, boundaryConditions, totalTime);
+
         this.noise = noise;
         int M = (int) Math.floor(L/interactionRadius);
         this.totalTime = totalTime;
@@ -39,37 +45,27 @@ public class SimulationFactory {
         //this.ParticlesList.add(borderParticle2);
     }
 
-    public void simulation(int NCircles, double RCircles, double L, int N, double noise){
+    public void simulation(int NCircles, double RCircles, double L, int N){
         try {
-            FileWriter writer_data = new FileWriter("output/DataSimulation.csv");
-            writer_data.write("x,y,vel,angulo,id,time");
+            FileWriter writer_data = new FileWriter("output/SimulationData_" + N + "_" + (int) L + "_" + noise + ".csv");
+            writer_data.write("id,x,y,vel,angulo,time");
 
-            double density = N / (L * L);
-            FileWriter writer_polarization = new FileWriter("output/Polarization_" + N + "_" + noise  + ".csv");
-            writer_polarization.write("tiempo,polarization,N,Density,Noise");
-
-            FileWriter writer_circles = new FileWriter("output/Circles_" + N + "_" + noise + ".csv");
+            FileWriter writer_circles = new FileWriter("output/Circles_" + N + "_" + this.noise + ".csv");
             writer_circles.write("id,x,y,counter,total,tiempo,noise,N");
 
             ArrayList<Circle> circles = SimulatedGrid.generateCircles(NCircles);
-            double VxSum, VySum;
 
             for(int t = 0; t < totalTime; t++){
                 Grid NextGrid = new Grid(SimulatedGrid);
                 List<Particle> NextParticleList = new ArrayList<>();
-                VxSum = 0;
-                VySum = 0;
 
                 SimulatedGrid.CIM(ParticlesList);
                 for(Particle particle : ParticlesList){
                     //System.out.println(particle + ", Time:" + t);
 
-                    Particle NextParticle = particle.nextParticle(frameSize, noise);
+                    Particle NextParticle = particle.nextParticle(frameSize, this.noise);
                     NextGrid.addParticle(NextParticle);
                     NextParticleList.add(NextParticle);
-
-                    VxSum += particle.getSpeed() * Math.sin(particle.getAngle());
-                    VySum += particle.getSpeed() * Math.cos(particle.getAngle());
 
                     for(Circle circle : circles){
                         if(RCircles > SimulatedGrid.gridDistance(particle.getX(), particle.getY(), circle.getX(), circle.getY()) && !circle.containsParticle(particle)){
@@ -78,22 +74,18 @@ public class SimulationFactory {
                         }
                     }
 
-                    writer_data.write( "\n" + particle.getX() + "," + particle.getY() + "," + particle.getSpeed() + "," + particle.getAngle() + "," + particle.getId() + "," + t);
+                    writer_data.write( "\n" + particle.getId() + "," + particle.getX() + "," + particle.getY() + "," + particle.getSpeed() + "," + particle.getAngle() + "," + t);
                 }
                 SimulatedGrid = NextGrid;
                 ParticlesList = NextParticleList;
 
-                double polarization = Math.sqrt(Math.pow(VxSum, 2) +  Math.pow(VySum, 2))/(ParticlesList.size() * ParticlesList.get(0).getSpeed());
-                writer_polarization.write( "\n" + t + "," + polarization + "," + N + "," + density + "," + noise);
-
                 for(Circle circle : circles){
-                    writer_circles.write("\n" + circle.getId() + "," + circle.getX() + "," + circle.getY() + "," + circle.getCounter() + "," + circle.size() + "," + t + "," + noise + "," + N);
+                    writer_circles.write("\n" + circle.getId() + "," + circle.getX() + "," + circle.getY() + "," + circle.getCounter() + "," + circle.size() + "," + t + "," + this.noise + "," + N);
                     circle.resetCounter();
                 }
             }
 
             writer_data.close();
-            writer_polarization.close();
             writer_circles.close();
 
         } catch(IOException e){
@@ -101,5 +93,24 @@ public class SimulationFactory {
         }
     }
 
+    public void writeStatus(double noise, double L, double speed, int N, double interactionRadius, boolean boundaryConditions, int totalTime){
+        try {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("N", N);
+            jsonObject.put("L", L);
+            jsonObject.put("speed",speed);
+            jsonObject.put("totalTime", totalTime);
+            jsonObject.put("noise", noise);
+            jsonObject.put("radius", interactionRadius);
+            jsonObject.put("boundary", boundaryConditions);
+
+            FileWriter writer_status = new FileWriter("output/StateData_" + N + "_" + (int) L + "_" + noise + ".json");
+            writer_status.write(jsonObject.toString());
+            writer_status.close();
+
+        } catch(IOException e){
+            System.out.println("Error al escribir en el archivo: " + e.getMessage());
+        }
+    }
 
 }
