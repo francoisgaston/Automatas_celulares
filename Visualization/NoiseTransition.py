@@ -11,8 +11,8 @@ import seaborn as sns
 # ---------------------------------------------------
 OUTPUT_PATH = '../Simulation/Automatas/output/'
 AVG_PATH = './output/'
-N = 5
-L = 1
+N = 400
+L = 10
 T_ESTACIONARIO = 200
 # ---------------------------------------------------
 

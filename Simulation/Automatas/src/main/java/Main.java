@@ -16,8 +16,8 @@ public class Main {
             return;
         }
         SimulationFactory simulator =
-                new SimulationFactory(config.getFrameSize(), config.getNoise(), config.getL(), config.getSpeed(),
-                        config.getN(), config.getInteractionRadius(), config.getBoundaryConditions(),
+                new SimulationFactory(1, config.getNoise(), config.getL(), config.getSpeed(),
+                        config.getN(), config.getInteractionRadius(), true,
                         config.getCircleBoundaryConditions(),config.getTotalTime());
 
         simulator.simulation(config.getNCircles(), config.getRCircles(), config.getL(), config.getN());
@@ -31,8 +31,8 @@ public class Main {
 
         for(double noise = 0; noise <= 5; noise+=0.5){
             SimulationFactory simulator =
-                    new SimulationFactory(config.getFrameSize(), noise, config.getL(), config.getSpeed(),
-                            config.getN(), config.getInteractionRadius(), config.getBoundaryConditions(),
+                    new SimulationFactory(1, noise, config.getL(), config.getSpeed(),
+                            config.getN(), config.getInteractionRadius(), true,
                             config.getCircleBoundaryConditions(),config.getTotalTime());
 
             simulator.simulation(config.getNCircles(), config.getRCircles(), config.getL(), config.getN());
@@ -47,8 +47,8 @@ public class Main {
 
         for(int N = 10; N <= 4020; N+=800){
             SimulationFactory simulator =
-                    new SimulationFactory(config.getFrameSize(), config.getNoise(), config.getL(), config.getSpeed(),
-                            N, config.getInteractionRadius(), config.getBoundaryConditions(),
+                    new SimulationFactory(1, config.getNoise(), config.getL(), config.getSpeed(),
+                            N, config.getInteractionRadius(), true,
                             config.getCircleBoundaryConditions(),config.getTotalTime());
 
             simulator.simulation(config.getNCircles(), config.getRCircles(), config.getL(), N);
