@@ -11,9 +11,9 @@ import seaborn as sns
 # ---------------------------------------------------
 OUTPUT_PATH = '../Simulation/Automatas/output/'
 AVG_PATH = './output/'
-N = 400
+N = 401
 L = 10
-T_ESTACIONARIO = 200
+T_ESTACIONARIO = 400
 # ---------------------------------------------------
 
 def custom_palette_with_skip(skip_color, polarized_df):
@@ -53,6 +53,7 @@ def merge_all_files():
     
     return combined_data
 
+
 def calculate_polarization(combined_df):
     # Calcula las componentes x e y de las velocidades
     combined_df['vel_x'] = combined_df['vel'] * np.cos(combined_df['angulo'])
@@ -63,9 +64,6 @@ def calculate_polarization(combined_df):
 
     # Calcular la suma de vel_x y vel_y para cada grupo de tiempo
     sum_velocities = grouped[['vel_x', 'vel_y']].sum()
-
-    # También, como mencionaste que algunas columnas van a ser iguales, puedes tomar solo la primera fila de cada grupo
-    # Aquí, por ejemplo, estoy tomando solo la primera fila y seleccionando las columnas que no van a cambiar
     result = grouped.first()[['vel', 'boundary', 'totalTime', 'L', 'radius', 'N', 'speed']]
 
     # Agregar las sumas de velocidades al DataFrame resultante
@@ -107,6 +105,17 @@ def save_final(polarized_df, tiempo_X):
 
     # Calcular el promedio y la desviación estándar de los resultados agrupados por el nivel de ruido
     resultados_agrupados = df_tiempo_X.groupby('noise')['resultado']
+    for noise_data in resultados_agrupados:
+        index = 0
+        total_value = 0
+        for value in noise_data:
+            print(value)
+            index += 1
+            total_value += value
+        total_value /= index
+        print("PROMEDIO" + str(total_value))
+
+    
     promedio_resultados = resultados_agrupados.mean()
     desviacion_estandar_resultados = resultados_agrupados.std()
 

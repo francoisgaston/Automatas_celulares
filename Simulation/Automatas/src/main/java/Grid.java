@@ -20,7 +20,7 @@ public class Grid {
     public Grid(Grid prevGrid){
         this.M = prevGrid.M;
         this.L = prevGrid.L;
-        this.Msize = L/M;
+        this.Msize = prevGrid.Msize;
         this.boundaryConditions = prevGrid.boundaryConditions;
         this.CircleBoundaryConditions = prevGrid.CircleBoundaryConditions;
         this.ParticleGrid = new ParticlesList[M][M];

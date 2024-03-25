@@ -9,13 +9,13 @@ public class Main {
         //Simulation();
 
         // Realizar simulaciones para luego analizar variación de polarizacion vs tiempo segun el nivel de ruido
-        //NoiseMultiSimulation();
+        NoiseMultiSimulation();
 
         // Realizar simulaciones para luego analizar variación de polarizacion vs tiempo segun la densidad (variando numero de particulas)
         //DensityMultiSimulation();
 
         // Realizar simulaciones para luego analizar comportamiento en funcion a 4 circulos.
-        CircleNoiseMultiSimulation();
+        //CircleNoiseMultiSimulation();
     }
 
     public static void Simulation(){
@@ -25,7 +25,7 @@ public class Main {
         }
         SimulationFactory simulator =
                 new SimulationFactory(1, config.getNoise(), config.getL(), config.getSpeed(),
-                        config.getN(), config.getInteractionRadius(), true,
+                        config.getN(), config.getInteractionRadius(), false,
                         config.getCircleBoundaryConditions(),config.getTotalTime());
 
         simulator.simulation(config.getNCircles(), config.getRCircles(), config.getL(), config.getN());
@@ -37,10 +37,10 @@ public class Main {
             return;
         }
 
-        for(double noise = 0; noise <= 5; noise+=0.5){
+        for(double noise = 0.25; noise <= 5; noise+=0.5){
             SimulationFactory simulator =
                     new SimulationFactory(1, noise, config.getL(), config.getSpeed(),
-                            config.getN(), config.getInteractionRadius(), true,
+                            config.getN(), config.getInteractionRadius(), false,
                             config.getCircleBoundaryConditions(),config.getTotalTime());
 
             simulator.simulation(config.getNCircles(), config.getRCircles(), config.getL(), config.getN());
