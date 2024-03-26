@@ -30,7 +30,9 @@ def plot_final(combined_df):
     plt.figure(figsize=(10, 6))
 
     for nombre_archivo, datos in combined_df.groupby('Archivo'):
-        plt.errorbar(datos['Noise'], datos['Promedio_Resultado'], yerr=datos['Desviacion_Estandar'], fmt='o', label=nombre_archivo)
+        plt.errorbar(datos['Noise'], datos['Promedio_Resultado'], yerr=datos['Desviacion_Estandar'], marker='o', label=nombre_archivo)
+        #plt.plot(datos['Noise'], datos['Promedio_Resultado'], marker='o', label=nombre_archivo)
+
 
     plt.xlabel('Ruido')
     plt.ylabel('Polarización Promedio')
