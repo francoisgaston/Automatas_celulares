@@ -28,7 +28,7 @@ public class Main {
                         config.getN(), config.getInteractionRadius(), false,
                         config.getCircleBoundaryConditions(),config.getTotalTime());
 
-        simulator.simulation(config.getNCircles(), config.getRCircles(), config.getL(), config.getN());
+        simulator.simulation(config.getL(), config.getN());
     }
 
     public static void NoiseMultiSimulation(){
@@ -43,7 +43,7 @@ public class Main {
                             config.getN(), config.getInteractionRadius(), false,
                             config.getCircleBoundaryConditions(),config.getTotalTime());
 
-            simulator.simulation(config.getNCircles(), config.getRCircles(), config.getL(), config.getN());
+            simulator.simulation(config.getL(), config.getN());
         }
     }
 
@@ -59,7 +59,7 @@ public class Main {
                             N, config.getInteractionRadius(), true,
                             config.getCircleBoundaryConditions(),config.getTotalTime());
 
-            simulator.simulation(config.getNCircles(), config.getRCircles(), config.getL(), N);
+            simulator.simulation(config.getL(), N);
         }
     }
 
@@ -75,7 +75,7 @@ public class Main {
                             config.getN(), config.getInteractionRadius(), true,
                             config.getCircleBoundaryConditions(),config.getTotalTime());
 
-            simulator.simulation(config.getNCircles(), config.getRCircles(), config.getL(), config.getN());
+            simulator.simulation(config.getL(), config.getN());
         }
     }
 

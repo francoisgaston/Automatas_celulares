@@ -5,7 +5,5 @@
   "N": 400,
   "interactionRadius": 1,
   "CircleBoundaryConditions": true,
-  "totalTime": 2000,
-  "NCircles": 4,
-  "RCircles": 1
+  "totalTime": 2000
 }

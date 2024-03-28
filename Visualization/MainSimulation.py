@@ -152,9 +152,13 @@ def parse_console_command(argv):
 
 if __name__ == '__main__':
     config = read_config_file(OUTPUT_PATH + 'StateData_' + str(N) + '_' + str(L) + '_' + str(NOISE) + '.json')
-    #config = read_config_file(CONFIG_FILE)
     particles_coords = pd.read_csv(PARTICLES_COORDINATES_FILE2)
-    circle_coords = pd.read_csv(CIRCLES_COORDINATES_FILE)
+    #circle_coords = pd.read_csv(CIRCLES_COORDINATES_FILE)
+    circle_coords = [
+        {'x': 4.359879568940831, 'y': 4.359879568940831, 'id': 0},
+        {'x': 5.401094653149744, 'y': 8.884408555473165, 'id': 1},
+        {'x': 7.219434561125443, 'y': 0.23352880823145794, 'id': 2}
+    ]
     timeFrames = particles_coords['time'].unique()
     particle_radius = config['radius']
     visualization_mode, fill_mode = parse_console_command(sys.argv)
