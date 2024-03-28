@@ -13,9 +13,10 @@ from matplotlib.animation import FFMpegWriter
 # ---------------------------------------------------
 OUTPUT_PATH = '../Simulation/Automatas/output/'
 AVG_PATH = './output/'
-L = 5
-NOISE = 0.1
-N = 100
+L = 10
+NOISE = 0.0
+N = 400
+RADIUS_CIRCLES = 1
 # ---------------------------------------------------
 
 PARTICLES_COORDINATES_FILE2 = ('../Simulation/Automatas/output/SimulationData_' + str(N) + '_' + str(L) + '_' +
@@ -150,18 +151,18 @@ def parse_console_command(argv):
 
 
 if __name__ == '__main__':
-    #config = read_config_file('StateData_' + str(N) + '_' + str(L) + '_' + str(NOISE) + '.json')
-    config = read_config_file(CONFIG_FILE)
+    config = read_config_file(OUTPUT_PATH + 'StateData_' + str(N) + '_' + str(L) + '_' + str(NOISE) + '.json')
+    #config = read_config_file(CONFIG_FILE)
     particles_coords = pd.read_csv(PARTICLES_COORDINATES_FILE2)
     circle_coords = pd.read_csv(CIRCLES_COORDINATES_FILE)
     timeFrames = particles_coords['time'].unique()
-    particle_radius = config['interactionRadius']
+    particle_radius = config['radius']
     visualization_mode, fill_mode = parse_console_command(sys.argv)
 
     # OpenCV #
     print('Drawing particles with opencv...')
     complete_visualization_opencv(particles_coords, timeFrames, particle_radius, L, N,
-                           config['RCircles'], circle_coords, visualization_mode, fill_mode)
+                           RADIUS_CIRCLES, circle_coords, visualization_mode, fill_mode)
     print('DONE!')
 
     # Matplotlib #
