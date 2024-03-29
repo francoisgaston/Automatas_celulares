@@ -37,7 +37,7 @@ public class Main {
             return;
         }
 
-        for(double noise = 0.5; noise <= 5; noise+=2){
+        for(double noise = 0.1; noise <= 5; noise+=0.25){
             SimulationFactory simulator =
                     new SimulationFactory(1, noise, config.getL(), config.getSpeed(),
                             config.getN(), config.getInteractionRadius(), false,
