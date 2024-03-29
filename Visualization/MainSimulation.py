@@ -1,3 +1,5 @@
+import csv
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
@@ -6,6 +8,7 @@ import os
 import sys
 import cv2
 from matplotlib.animation import FFMpegWriter
+from CircleTransition import Circle
 
 
 # ---------------------------------------------------
@@ -14,9 +17,10 @@ from matplotlib.animation import FFMpegWriter
 OUTPUT_PATH = '../Simulation/Automatas/output/'
 AVG_PATH = './output/'
 L = 10
-NOISE = 0.0
+NOISE = 4.0
 N = 400
 RADIUS_CIRCLES = 1
+N_CIRCLES = 4
 # ---------------------------------------------------
 
 PARTICLES_COORDINATES_FILE2 = ('../Simulation/Automatas/output/SimulationData_' + str(N) + '_' + str(L) + '_' +
@@ -40,10 +44,10 @@ NO_FILL = 'nofill'
 # ---------------------------------------------------
 
 
-def angle_to_rgb(angle, mode, circle_coords, circle_radius, particle_pos, amount_circles):
+def angle_to_rgb(angle, mode, isInside):
     base_value = 100
     color_coefficient = 0.4
-    blue, green, red = 0,0,0
+    blue, green, red = 0, 0, 0
     if mode == GRAY_MODE:
         red = color_coefficient * (angle * ANGLE_TO_RGB) + base_value
         green = color_coefficient * (angle * ANGLE_TO_RGB) + base_value
@@ -53,9 +57,14 @@ def angle_to_rgb(angle, mode, circle_coords, circle_radius, particle_pos, amount
         green = (255 * np.abs(np.sin(angle + np.pi))) % 255
         blue = (255 * np.abs(np.cosh(angle))) % 255
     else:
-        red = 0
-        green = 0
-        blue = 255
+        if isInside:
+            red = 0
+            green = 255
+            blue = 0
+        else:
+            red = 0
+            green = 0
+            blue = 255
 
     return int(blue), int(green), int(red)
 
@@ -108,21 +117,26 @@ def complete_visualization_opencv(particles_coords, timeFrames, particle_radius,
             start_pos = [int(fila['x'] * SCALE_FACTOR), int(fila['y'] * SCALE_FACTOR)]
             finish_pos = [int(SCALE_FACTOR * fila['x']) + int(dx), int(SCALE_FACTOR * fila['y']) + int(dy)]
             current_pos = [int(fila['x'] * SCALE_FACTOR), int(fila['y'] * SCALE_FACTOR)]
-            cv2.arrowedLine(frame, tuple(start_pos), tuple(finish_pos),
-                            (angle_to_rgb(fila['angulo'], mode, circle_coords, circle_radius, current_pos, amount_circles)),
-                            5, cv2.LINE_AA)
+
+            if visualization_mode == NORMAL_MODE:
+                cv2.arrowedLine(frame, tuple(start_pos), tuple(finish_pos),
+                                (angle_to_rgb(fila['angulo'], mode, fila['isInside'])),
+                                5, cv2.LINE_AA)
+            else:
+                cv2.arrowedLine(frame, tuple(start_pos), tuple(finish_pos),
+                                (angle_to_rgb(fila['angulo'], mode, False)),
+                                5, cv2.LINE_AA)
+
             if fill_mode == NO_FILL:
                 cv2.circle(frame, tuple(current_pos), int(particle_radius * SCALE_FACTOR),
                            (angle_to_rgb(fila['angulo'], mode, circle_coords, circle_radius, current_pos, amount_circles)), 0)
-            else:
+            elif fill_mode == FILL:
                 cv2.circle(frame, tuple(current_pos), int(particle_radius * SCALE_FACTOR),
                            (angle_to_rgb(fila['angulo'], mode, circle_coords, circle_radius, current_pos, amount_circles)), -1)
 
         if mode == NORMAL_MODE:
-            for index, fila in circle_coords.iterrows():
-                if index > amount_circles:
-                    break
-                current_pos = [int(fila['x'] * SCALE_FACTOR), int(fila['y'] * SCALE_FACTOR)]
+            for circle in circle_coords:
+                current_pos = [int(circle.get('x') * SCALE_FACTOR), int(circle.get('y') * SCALE_FACTOR)]
                 cv2.circle(frame, tuple(current_pos), circle_radius * SCALE_FACTOR, (0, 255, 0), 5)
 
         video_writer.write(frame)
@@ -139,8 +153,10 @@ def read_config_file(file_path):
 def parse_console_command(argv):
     if FILL in argv:
         fill_mode = FILL
-    else:
+    elif NO_FILL in argv:
         fill_mode = NO_FILL
+    else:
+        fill_mode = ''
 
     if NORMAL_MODE in argv:
         return NORMAL_MODE, fill_mode
@@ -150,23 +166,46 @@ def parse_console_command(argv):
         return GRAY_MODE, fill_mode
 
 
+def parse_particle_coords(particle_coords, circles):
+    with open('ParsedSimulationData_' + str(N) + '_' + str(L) + '_' + str(NOISE) + '.csv',
+              mode='w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(['id', 'x', 'y', 'vel', 'angulo', 'time', 'isInside'])
+        for index, row in particle_coords.iterrows():
+            isInside = False
+            for circle in circles:
+                if circle.inside_circle(row['x'], row['y']):
+                    isInside = True
+                    break
+            row['isInside'] = isInside
+            writer.writerow(row)
+
+
 if __name__ == '__main__':
     config = read_config_file(OUTPUT_PATH + 'StateData_' + str(N) + '_' + str(L) + '_' + str(NOISE) + '.json')
     particles_coords = pd.read_csv(PARTICLES_COORDINATES_FILE2)
-    #circle_coords = pd.read_csv(CIRCLES_COORDINATES_FILE)
-    circle_coords = [
-        {'x': 4.359879568940831, 'y': 4.359879568940831, 'id': 0},
-        {'x': 5.401094653149744, 'y': 8.884408555473165, 'id': 1},
-        {'x': 7.219434561125443, 'y': 0.23352880823145794, 'id': 2}
-    ]
+    circles = []
+    circles_coords = []
+    for i in range(N_CIRCLES):
+        circle = Circle(L, RADIUS_CIRCLES)
+        circles.append(circle)
+        circles_coords.append({'x': circle.x, 'y': circle.y})
+
     timeFrames = particles_coords['time'].unique()
     particle_radius = config['radius']
     visualization_mode, fill_mode = parse_console_command(sys.argv)
 
+    # Parse Particle coords for coloring #
+    if visualization_mode == NORMAL_MODE:
+        print('Parsing particle coords...')
+        parse_particle_coords(particles_coords, circles)
+        particles_coords = pd.read_csv('ParsedSimulationData_' + str(N) + '_' + str(L) + '_' + str(NOISE) + '.csv')
+        print('DONE!\n')
+
     # OpenCV #
     print('Drawing particles with opencv...')
     complete_visualization_opencv(particles_coords, timeFrames, particle_radius, L, N,
-                           RADIUS_CIRCLES, circle_coords, visualization_mode, fill_mode)
+                           RADIUS_CIRCLES, circles_coords, visualization_mode, fill_mode)
     print('DONE!')
 
     # Matplotlib #
