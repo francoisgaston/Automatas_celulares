@@ -45,15 +45,10 @@ public class SimulationFactory {
         //this.ParticlesList.add(borderParticle2);
     }
 
-    public void simulation(int NCircles, double RCircles, double L, int N){
+    public void simulation(double L, int N){
         try {
             FileWriter writer_data = new FileWriter("output/SimulationData_" + N + "_" + (int) L + "_" + noise + ".csv");
             writer_data.write("id,x,y,vel,angulo,time");
-
-            FileWriter writer_circles = new FileWriter("output/Circles_" + N + "_" + this.noise + ".csv");
-            writer_circles.write("id,x,y,counter,total,tiempo,noise,N");
-
-            ArrayList<Circle> circles = SimulatedGrid.generateCircles(NCircles);
 
             for(int t = 0; t < totalTime; t++){
                 Grid NextGrid = new Grid(SimulatedGrid);
@@ -67,27 +62,13 @@ public class SimulationFactory {
                     NextGrid.addParticle(NextParticle);
                     NextParticleList.add(NextParticle);
 
-                    for(Circle circle : circles){
-                        if(RCircles > SimulatedGrid.gridDistance(particle.getX(), particle.getY(), circle.getX(), circle.getY()) && !circle.containsParticle(particle)){
-                            circle.addParticle(particle);
-                            circle.increaseCounter();
-                        }
-                    }
-
                     writer_data.write( "\n" + particle.getId() + "," + particle.getX() + "," + particle.getY() + "," + particle.getSpeed() + "," + particle.getAngle() + "," + t);
                 }
                 SimulatedGrid = NextGrid;
                 ParticlesList = NextParticleList;
-
-                for(Circle circle : circles){
-                    writer_circles.write("\n" + circle.getId() + "," + circle.getX() + "," + circle.getY() + "," + circle.getCounter() + "," + circle.size() + "," + t + "," + this.noise + "," + N);
-                    circle.resetCounter();
-                }
             }
 
             writer_data.close();
-            writer_circles.close();
-
         } catch(IOException e){
             System.out.println("Error al escribir en el archivo: " + e.getMessage());
         }

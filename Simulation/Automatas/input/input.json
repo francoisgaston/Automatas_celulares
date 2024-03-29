@@ -1,11 +1,9 @@
 {
   "noise": 0,
-  "L": 5,
-  "speed": 0.03,
-  "N": 300,
+  "L": 10,
+  "speed": 0.3,
+  "N": 400,
   "interactionRadius": 1,
   "CircleBoundaryConditions": true,
-  "totalTime": 1000,
-  "NCircles": 4,
-  "RCircles": 1
+  "totalTime": 2000
 }
