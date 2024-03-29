@@ -2,7 +2,7 @@
   "L": 31.6,
   "N": 4000,
   "speed": 0.03,
-  "interactionRadius": 0.9,
+  "interactionRadius": 1,
   "totalTime": 4000,
   "CircleBoundaryConditions": true,
   "NCircles": 4,

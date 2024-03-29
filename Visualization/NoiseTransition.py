@@ -11,9 +11,9 @@ import seaborn as sns
 # ---------------------------------------------------
 OUTPUT_PATH = '../Simulation/Automatas/output/'
 AVG_PATH = './output/'
-N = 4000
-L = 31
-T_ESTACIONARIO = 1000
+N = 40
+L = 3
+T_ESTACIONARIO = 700
 # ---------------------------------------------------
 
 def custom_palette_with_skip(skip_color, polarized_df):
@@ -83,18 +83,21 @@ def calculate_polarization(combined_df):
     return result
 
 def plot_transition(polarized_df, tiempo_X):
+    # Establecer el estilo sin grilla
+    sns.set_style("white")
+
     # Definir colores personalizados para los diferentes niveles de ruido
     custom_palette = custom_palette_with_skip(1, polarized_df)
 
+    # Graficar
     sns.lineplot(data=polarized_df, x="time", y="resultado", hue="noise", palette=custom_palette)
 
     # Agregar una línea vertical roja en el tiempo 200
     plt.axvline(x=tiempo_X, color='red', linestyle='--', linewidth=2)
 
     # Añadir título y etiquetas de ejes
-    plt.title('Resultado vs Tiempo por Nivel de Ruido')
-    plt.xlabel('Tiempo')
-    plt.ylabel('Resultado')
+    plt.xlabel('Tiempo[S]', fontsize=16)
+    plt.ylabel('Polarización', fontsize=16)
 
     # Mostrar la gráfica
     plt.show()
@@ -105,17 +108,6 @@ def save_final(polarized_df, tiempo_X):
 
     # Calcular el promedio y la desviación estándar de los resultados agrupados por el nivel de ruido
     resultados_agrupados = df_tiempo_X.groupby('noise')['resultado']
-    for noise_data in resultados_agrupados:
-        index = 0
-        total_value = 0
-        for value in noise_data:
-            print(value)
-            index += 1
-            total_value += value
-        total_value /= index
-        print("PROMEDIO" + str(total_value))
-
-    
     promedio_resultados = resultados_agrupados.mean()
     desviacion_estandar_resultados = resultados_agrupados.std()
 

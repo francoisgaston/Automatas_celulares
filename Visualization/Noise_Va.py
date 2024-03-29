@@ -22,7 +22,6 @@ def combinar():
 
     # Combinar todos los DataFrames en uno solo
     datos_combinados = pd.concat(datos_combinados, ignore_index=True)
-
     return datos_combinados
 
 def plot_final(combined_df):
@@ -30,21 +29,18 @@ def plot_final(combined_df):
     plt.figure(figsize=(10, 6))
 
     for nombre_archivo, datos in combined_df.groupby('Archivo'):
-        plt.errorbar(datos['Noise'], datos['Promedio_Resultado'], yerr=datos['Desviacion_Estandar'], marker='o', label=nombre_archivo)
+        plt.errorbar(datos['Noise'], datos['Promedio_Resultado'], yerr=datos['Desviacion_Estandar'], fmt='o', label=nombre_archivo)
         #plt.plot(datos['Noise'], datos['Promedio_Resultado'], marker='o', label=nombre_archivo)
 
-
-    plt.xlabel('Ruido')
-    plt.ylabel('Polarización Promedio')
-    plt.title('Polarización Promedio vs Ruido')
+    plt.xlabel('Ruido[rad]', fontsize=16)
+    plt.ylabel('Polarización', fontsize=16)
     plt.legend()
-    plt.grid(True)
+    plt.grid(False)
     plt.show()
 
 def main():
     # Unir todos los CSV en un solo DataFrame
     datos_combinados = combinar()
-
     # Graficar los datos combinados
     plot_final(datos_combinados)
 
