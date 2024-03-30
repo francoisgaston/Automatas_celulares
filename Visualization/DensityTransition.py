@@ -12,7 +12,7 @@ import seaborn as sns
 OUTPUT_PATH = '../Simulation/Automatas/output/'
 AVG_PATH = './output/'
 L = 20
-NOISE = 1.0
+NOISE = 3.0
 T_ESTACIONARIO = 500
 # ---------------------------------------------------
 

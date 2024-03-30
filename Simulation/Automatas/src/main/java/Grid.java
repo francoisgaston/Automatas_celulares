@@ -129,12 +129,4 @@ public class Grid {
         }
     }
 
-    public ArrayList<Circle> generateCircles(int NCircles){
-        ArrayList<Circle> circles = new ArrayList<>();
-        for (int i = 0; i < NCircles; i++) {
-            circles.add(new Circle(L, i));
-        }
-        return circles;
-    }
-
 }

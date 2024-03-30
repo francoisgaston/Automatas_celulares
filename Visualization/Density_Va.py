@@ -31,11 +31,10 @@ def plot_final(combined_df):
     for nombre_archivo, datos in combined_df.groupby('Archivo'):
         plt.errorbar(datos['Density'], datos['Promedio_Resultado'], yerr=datos['Desviacion_Estandar'], fmt='o', label=nombre_archivo)
 
-    plt.xlabel('Density')
-    plt.ylabel('Polarización Promedio')
-    plt.title('Polarización Promedio vs Density')
+    plt.xlabel('Densidad [Particulas/??²]', fontsize=16)
+    plt.ylabel('Polarización Promedio', fontsize=16)
     plt.legend()
-    plt.grid(True)
+    plt.grid(False)
     plt.show()
 
 

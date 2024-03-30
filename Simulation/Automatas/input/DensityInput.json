@@ -1,8 +1,8 @@
 {
-  "noise": 1,
+  "noise": 3,
   "L": 20,
   "speed": 0.03,
   "interactionRadius": 1,
-  "CircleBoundaryConditions": false,
-  "totalTime": 1000
+  "totalTime": 3000,
+  "CircleBoundaryConditions": false
 }

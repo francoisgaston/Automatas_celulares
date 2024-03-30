@@ -11,9 +11,9 @@ import seaborn as sns
 # ---------------------------------------------------
 OUTPUT_PATH = '../Simulation/Automatas/output/'
 AVG_PATH = './output/'
-N = 40
-L = 3
-T_ESTACIONARIO = 700
+N = 4000
+L = 31
+T_ESTACIONARIO = 3000
 # ---------------------------------------------------
 
 def custom_palette_with_skip(skip_color, polarized_df):
