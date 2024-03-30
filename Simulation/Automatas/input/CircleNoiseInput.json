@@ -4,5 +4,5 @@
   "speed": 0.03,
   "interactionRadius": 1,
   "totalTime": 1000,
-  "CircleBoundaryConditions": true
+  "CircleBoundaryConditions": false
 }

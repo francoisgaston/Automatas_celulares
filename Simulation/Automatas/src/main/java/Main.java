@@ -69,7 +69,7 @@ public class Main {
             return;
         }
 
-        for(double noise = 1; noise <= 5; noise+=2){
+        for(double noise = 5; noise <= 6; noise+=0.5){
             SimulationFactory simulator =
                     new SimulationFactory(1, noise, config.getL(), config.getSpeed(),
                             config.getN(), config.getInteractionRadius(), true,
