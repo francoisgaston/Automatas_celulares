@@ -170,14 +170,14 @@ def parse_particle_coords(particle_coords, circles):
     with open('ParsedSimulationData_' + str(N) + '_' + str(L) + '_' + str(NOISE) + '.csv',
               mode='w', newline='') as file:
         writer = csv.writer(file)
+        infected_particles = {}
         writer.writerow(['id', 'x', 'y', 'vel', 'angulo', 'time', 'isInside'])
         for index, row in particle_coords.iterrows():
-            isInside = False
             for circle in circles:
-                if circle.inside_circle(row['x'], row['y']):
-                    isInside = True
+                if circle.inside_circle(row['x'], row['y']) and infected_particles.get(row['id']) is None:
+                    infected_particles[row['id']] = True
                     break
-            row['isInside'] = isInside
+            row['isInside'] = False if infected_particles.get(row['id']) is None else True
             writer.writerow(row)
 
 
