@@ -3,6 +3,6 @@
   "N": 300,
   "speed": 0.03,
   "interactionRadius": 1,
-  "totalTime": 1000,
-  "CircleBoundaryConditions": false
+  "totalTime": 4000,
+  "CircleBoundaryConditions": true
 }

@@ -20,7 +20,7 @@ L = 5
 RADIUS = 0.5
 N_CIRCLES = 4
 TIMES = 5000
-BREAK = 150
+BREAK = 75
 # ---------------------------------------------------
 
 
@@ -88,7 +88,7 @@ def save_plot_data(parcial_count, noises):
         fieldnames = ['Noise','Tiempo']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
-
+        plt.figure(figsize=(10, 6))
         cmap = plt.get_cmap('tab10')
         num_colors = len(parcial_count)
         colors = [cmap(i) for i in np.linspace(0, 1, num_colors)]
@@ -100,21 +100,23 @@ def save_plot_data(parcial_count, noises):
                 array_acumulado = []
                 for index, valor in enumerate(circle_vector):
                     acumulado += valor
-                    array_acumulado.append(acumulado)
-                    if acumulado >= BREAK and ready:
+                    array_acumulado.append(acumulado/N)
+                    if acumulado >= (BREAK/100)*N and ready:
                         ready = False
                         writer.writerow({'Noise': noises[index_file], 'Tiempo': index})
                 if index_circle == 0:
-                    plt.plot(array_acumulado, label=f'Ruido {noises[index_file]}', color=colors[index_file])
+                    plt.plot(array_acumulado, label=f'Ruido = {noises[index_file]}', color=colors[index_file])
                 else:
                     plt.plot(array_acumulado, color=colors[index_file])
         
-        print("---------------------------------------")
-        print("Datos guardados en: " + "output/Circles_PBC_" + str(BREAK*100/N) + '.csv')
+        plt.axhline(y=BREAK/100, color='red', linestyle='--', linewidth=2)
 
-        plt.xlabel('Tiempo[s]')
-        plt.ylabel('Particulas')
-        plt.legend()
+        print("---------------------------------------")
+        print("Datos guardados en: " + "output/Circles_PBC_" + str(BREAK) + '.csv')
+
+        plt.xlabel('Tiempo[s]', fontsize=16)
+        plt.ylabel('Porcentaje de Particulas', fontsize=16)
+        plt.legend(bbox_to_anchor=(0.5, 1.15), loc='upper center', borderaxespad=0, fontsize=12, ncol=3)
         plt.show()
 
 

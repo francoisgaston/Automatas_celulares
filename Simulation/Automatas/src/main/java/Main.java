@@ -37,7 +37,7 @@ public class Main {
             return;
         }
 
-        for(double noise = 0.3; noise <= 1; noise+=0.5){
+        for(double noise = 0.8; noise <= 5; noise+=0.5){
             SimulationFactory simulator =
                     new SimulationFactory(1, noise, config.getL(), config.getSpeed(),
                             config.getN(), config.getInteractionRadius(), false,
@@ -53,7 +53,7 @@ public class Main {
             return;
         }
 
-        for(int N = 10; N <= 4000; N+=4000){
+        for(int N = 3000; N <= 4000; N+=4000){
             SimulationFactory simulator =
                     new SimulationFactory(1, config.getNoise(), config.getL(), config.getSpeed(),
                             N, config.getInteractionRadius(), true,
@@ -69,7 +69,7 @@ public class Main {
             return;
         }
 
-        for(double noise = 5; noise <= 6; noise+=0.5){
+        for(double noise = 0; noise <= 5; noise+=0.5){
             SimulationFactory simulator =
                     new SimulationFactory(1, noise, config.getL(), config.getSpeed(),
                             config.getN(), config.getInteractionRadius(), true,

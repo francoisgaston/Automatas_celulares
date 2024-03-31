@@ -12,8 +12,8 @@ import seaborn as sns
 OUTPUT_PATH = '../Simulation/Automatas/output/'
 AVG_PATH = './output/'
 L = 20
-NOISE = 3.0
-T_ESTACIONARIO = 500
+NOISE = 2.0
+T_ESTACIONARIO = 1000
 # ---------------------------------------------------
 
 def custom_palette_with_skip(skip_color, polarized_df):
@@ -85,18 +85,19 @@ def calculate_polarization(combined_df):
     return result
 
 def plot_transition(polarized_df, tiempo_X):
+    sns.set_style("white")
     # Definir colores personalizados para los diferentes niveles de ruido
     custom_palette = custom_palette_with_skip(1, polarized_df)
-
+    plt.figure(figsize=(10, 6))
     sns.lineplot(data=polarized_df, x="time", y="resultado", hue="N", palette=custom_palette)
 
     # Agregar una línea vertical roja en el tiempo 200
     plt.axvline(x=tiempo_X, color='red', linestyle='--', linewidth=2)
 
     # Añadir título y etiquetas de ejes
-    plt.title('Resultado vs Tiempo por Nivel de Ruido')
-    plt.xlabel('Tiempo')
-    plt.ylabel('Resultado')
+    plt.xlabel('Tiempo[S]', fontsize=16)
+    plt.ylabel('Polarización', fontsize=16)
+    plt.legend(title="Numero de particulas", bbox_to_anchor=(0.5, 1.15), loc='upper center', borderaxespad=0, fontsize=12, ncol=3)
 
     # Mostrar la gráfica
     plt.show()

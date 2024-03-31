@@ -13,7 +13,7 @@ OUTPUT_PATH = '../Simulation/Automatas/output/'
 AVG_PATH = './output/'
 N = 4000
 L = 31
-T_ESTACIONARIO = 3000
+T_ESTACIONARIO = 1500
 # ---------------------------------------------------
 
 def custom_palette_with_skip(skip_color, polarized_df):
@@ -53,7 +53,6 @@ def merge_all_files():
     
     return combined_data
 
-
 def calculate_polarization(combined_df):
     # Calcula las componentes x e y de las velocidades
     combined_df['vel_x'] = combined_df['vel'] * np.cos(combined_df['angulo'])
@@ -88,7 +87,8 @@ def plot_transition(polarized_df, tiempo_X):
 
     # Definir colores personalizados para los diferentes niveles de ruido
     custom_palette = custom_palette_with_skip(1, polarized_df)
-
+    plt.figure(figsize=(10, 6))
+               
     # Graficar
     sns.lineplot(data=polarized_df, x="time", y="resultado", hue="noise", palette=custom_palette)
 
@@ -98,6 +98,7 @@ def plot_transition(polarized_df, tiempo_X):
     # Añadir título y etiquetas de ejes
     plt.xlabel('Tiempo[S]', fontsize=16)
     plt.ylabel('Polarización', fontsize=16)
+    plt.legend(title="Noise", bbox_to_anchor=(0.5, 1.15), loc='upper center', borderaxespad=0, fontsize=12, ncol=3)
 
     # Mostrar la gráfica
     plt.show()
