@@ -1,4 +1,4 @@
-# Automatas celulares - Off Lattice#
+# Automatas celulares - Off Lattice #
 
 Repositorio correspondiente al segundo trabajo practico de la materia Simulacion de sistemas - 72.25 en el cual se simula y analiza el comportamiento de un sistema Off Lattice.
 
