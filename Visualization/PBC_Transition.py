@@ -107,10 +107,11 @@ def save_plot_data(parcial_count, noises):
                     if acumulado >= (BREAK/100)*N and ready:
                         ready = False
                         writer.writerow({'Noise': noises[index_file], 'Tiempo': index})
-                if index_circle == 0:
-                    plt.plot(array_acumulado, label=f'Ruido = {noises[index_file]}', color=colors[index_file])
-                else:
-                    plt.plot(array_acumulado, color=colors[index_file])
+                if noises[index_file] == '0.0' or noises[index_file] == '2.0' or noises[index_file] == '4.0':
+                    if index_circle == 0:
+                        plt.plot(array_acumulado, label=f'Ruido = {noises[index_file]}', color=colors[index_file])
+                    else:
+                        plt.plot(array_acumulado, color=colors[index_file])
         
         plt.axhline(y=BREAK/100, color='red', linestyle='--', linewidth=2)
 

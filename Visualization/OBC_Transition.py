@@ -15,11 +15,11 @@ import re
 # DATOS A CAMBIAR SEGÚN EL CASO DE ESTUDIO
 # ---------------------------------------------------
 OUTPUT_PATH = '../Simulation/Automatas/output/'
-N = 600
+N = 100
 L = 5
 RADIUS = 0.5
 N_CIRCLES = 4
-TIMES = 4000
+TIMES = 1000
 STEPS = 5
 # ---------------------------------------------------
 
@@ -144,7 +144,7 @@ def regresion_best_c(values):
 
     init_c = 0
     max_c = 2
-    grid = 10
+    grid = 100
     prev_error = (TIMES*N) ** 2
 
     for times in range(STEPS):
@@ -159,7 +159,9 @@ def regresion_best_c(values):
                 prev_error = error
             grid_division_value += (max_c-init_c)/grid
         
-        init_c = grid_division_value - (max_c-init_c)/grid
+        init_c = grid_division_value - (max_c-init_c)/grid - (max_c-init_c)/grid
+        if init_c < 0:
+            init_c = 0
         max_c = grid_division_value
     
     return max_c, prev_error
@@ -175,7 +177,7 @@ def main():
 
     parcial_count, noises = read_files(parcial_count, noises, circles)
 
-    #plot_data(parcial_count, noises)
+    plot_data(parcial_count, noises)
 
     prom_count = []
 
