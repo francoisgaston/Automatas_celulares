@@ -19,7 +19,7 @@ N = 300
 L = 5
 RADIUS = 0.5
 N_CIRCLES = 4
-TIMES = 5000
+TIMES = 4000
 BREAK = 75
 # ---------------------------------------------------
 
@@ -45,8 +45,11 @@ class Circle:
 
 def generate_circles():
     circles = [Circle(L, RADIUS) for _ in range(N_CIRCLES)]
+    print("---------------------------------------")
+    print("Circulos generados:")
     for circle in circles:
-        print(circle.x, circle.y, circle.radius)
+        print("x: " + str(circle.x) + ", Y: " + str(circle.y) + "radio: " + str(circle.radius))
+    print("---------------------------------------")
     return circles
 
 def read_files(parcial_count, noises, circles):

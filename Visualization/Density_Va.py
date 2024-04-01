@@ -38,7 +38,7 @@ def plot_final(combined_df):
     plt.figure(figsize=(10, 6))
 
     for nombre_archivo, datos in combined_df.groupby('Archivo'):
-        plt.errorbar(datos['Density'], datos['Promedio_Resultado'], yerr=datos['Desviacion_Estandar'], fmt='o', label=f"Noise= " + extraer_ruido(nombre_archivo))
+        plt.errorbar(datos['Density'], datos['Promedio_Resultado'], yerr=datos['Desviacion_Estandar'], fmt='o', label=f"Ruido= " + extraer_ruido(nombre_archivo))
 
     plt.xlabel('Densidad [Particulas/m²]', fontsize=16)
     plt.ylabel('Polarización', fontsize=16)

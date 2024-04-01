@@ -15,7 +15,7 @@ import re
 # DATOS A CAMBIAR SEGÚN EL CASO DE ESTUDIO
 # ---------------------------------------------------
 OUTPUT_PATH = '../Simulation/Automatas/output/'
-N = 300
+N = 600
 L = 5
 RADIUS = 0.5
 N_CIRCLES = 4
@@ -45,8 +45,11 @@ class Circle:
 
 def generate_circles():
     circles = [Circle(L, RADIUS) for _ in range(N_CIRCLES)]
+    print("---------------------------------------")
+    print("Circulos generados:")
     for circle in circles:
-        print(circle.x, circle.y, circle.radius)
+        print("x: " + str(circle.x) + ", Y: " + str(circle.y) + "radio: " + str(circle.radius))
+    print("---------------------------------------")
     return circles
 
 def read_files(parcial_count, noises, circles):
@@ -140,7 +143,7 @@ def save_best_c(prom_count, noises):
 def regresion_best_c(values):
 
     init_c = 0
-    max_c = 0.5
+    max_c = 2
     grid = 10
     prev_error = (TIMES*N) ** 2
 
@@ -180,7 +183,7 @@ def main():
 
     best_c = save_best_c(prom_count, noises)
 
-    '''
+    
     for prom in prom_count:
         plt.plot(prom)
 
@@ -190,7 +193,7 @@ def main():
         plt.plot(x, y)
 
     plt.show()
-    '''
+    
 
 
 if __name__ == "__main__":
