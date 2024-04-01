@@ -28,7 +28,7 @@ python3 MainSimulation.py
 
 ### Analisis de Polaridad - Ruido
 
-Para realizar este analisis se provee la función **_NoiseMultiSimulation()_** dentro del condigo java. Esta función correrá todos las simulaciones necesarias para el posterior analisis.
+Para realizar este analisis se provee la función **_NoiseMultiSimulation()_** dentro del condigo java. Esta función correrá todas las simulaciones necesarias para el posterior analisis.
 
 Una vez realizadas las simulaciones necesarias dirigirse a la carpeta visualization y correr el comando
 
@@ -41,11 +41,11 @@ Este script mostrará la evolución de la polarización en el tiempo y dado un t
 python3 Noise_Va.py
 ````
 
-si se desea modificar algún input de la simulación, dirigirse al archivo **_Simulation/Automatas/input/Noiseinput.json_** y modificar los valores como se explicó en la sección anterior. A continuación dirigirse a **_Noise_Transicion.py_** y modificar los valores constates con los mismos valores deseados.
+si se desea modificar algún input de la simulación, dirigirse al archivo **_Simulation/Automatas/input/Noiseinput.json_** y modificar los valores como se explicó en la sección "Simulación y visualización". A continuación dirigirse a **_Noise_Transicion.py_** y modificar los valores constates con los mismos valores deseados.
 
 ### Analisis de Polaridad - Densidad
 
-Para realizar este analisis se provee la función **_DensityMultiSimulation()_** dentro del condigo java. Esta función correrá todos las simulaciones necesarias para el posterior analisis.
+Para realizar este analisis se provee la función **_DensityMultiSimulation()_** dentro del condigo java. Esta función correrá todas las simulaciones necesarias para el posterior analisis.
 
 Una vez realizadas las simulaciones necesarias dirigirse a la carpeta visualization y correr el comando
 
@@ -58,12 +58,13 @@ Este script mostrará la evolución de la polarización en el tiempo y dado un t
 python3 Density_Va.py
 ````
 
-si se desea modificar algún input de la simulación, dirigirse al archivo **_Simulation/Automatas/input/Densityinput.json_** y modificar los valores como se explicó en la sección anterior. A continuación dirigirse a **_Density_Transicion.py_** y modificar los valores constates con los mismos valores deseados.
+Si se desea modificar algún input de la simulación, dirigirse al archivo **_Simulation/Automatas/input/Densityinput.json_** y modificar los valores como se explicó en la sección "Simulación y visualización". A continuación dirigirse a **_Density_Transicion.py_** y modificar los valores constates con los mismos valores deseados.
 
 ### Analisis de zonas de conteo (PBC)
 
 Antes de comenzar con este analisis dirigirse al archivo **_Simulation/Automatas/input/CircleNoiseinput.json_** y revisar que el campo **_CircleBoundaryConditions esté en false_**.
-Para realizar este analisis se provee la función **_CircleNoiseMultiSimulation()_** dentro del condigo java. Esta función correrá todos las simulaciones necesarias para el posterior analisis.
+
+Para realizar este analisis se provee la función **_CircleNoiseMultiSimulation()_** dentro del condigo java. Esta función correrá todas las simulaciones necesarias para el posterior analisis.
 
 Una vez realizadas las simulaciones necesarias dirigirse a la carpeta visualization y correr el comando
 
@@ -76,12 +77,13 @@ Este script mostrará la evolución del porcentaje de particulas en el tiempo y 
 python3 PBC_Noise.py
 ````
 
-si se desea modificar algún input de la simulación, dirigirse al archivo **_Simulation/Automatas/input/Densityinput.json_** y modificar los valores como se explicó en la sección anterior. A continuación dirigirse a **_PBC_Transicion.py_** y modificar los valores constates con los mismos valores deseados.
+Si se desea modificar algún input de la simulación, dirigirse al archivo **_Simulation/Automatas/input/CircleNoiseinput.json_** y modificar los valores como se explicó en la sección "Simulación y visualización". A continuación dirigirse a **_PBC_Transicion.py_** y modificar los valores constates con los mismos valores deseados.
 
 ### Analisis de zonas de conteo (OBC)
 
 Antes de comenzar con este analisis dirigirse al archivo **_Simulation/Automatas/input/CircleNoiseinput.json_** y revisar que el campo **_CircleBoundaryConditions esté en true_**.
-Para realizar este analisis se provee la función **_CircleNoiseMultiSimulation()_** dentro del condigo java. Esta función correrá todos las simulaciones necesarias para el posterior analisis.
+
+Para realizar este analisis se provee la función **_CircleNoiseMultiSimulation()_** dentro del condigo java. Esta función correrá todas las simulaciones necesarias para el posterior analisis.
 
 Una vez realizadas las simulaciones necesarias dirigirse a la carpeta visualization y correr el comando
 
@@ -94,7 +96,7 @@ Este script mostrará la evolución de la cantidad de particulas en el tiempo y 
 python3 OBC_Noise.py
 ````
 
-si se desea modificar algún input de la simulación, dirigirse al archivo **_Simulation/Automatas/input/Densityinput.json_** y modificar los valores como se explicó en la sección anterior. A continuación dirigirse a **_OBC_Transicion.py_** y modificar los valores constates con los mismos valores deseados.
+Si se desea modificar algún input de la simulación, dirigirse al archivo **_Simulation/Automatas/input/CircleNoiseinput.json_** y modificar los valores como se explicó en la sección "Simulación y visualización". A continuación dirigirse a **_OBC_Transicion.py_** y modificar los valores constates con los mismos valores deseados.
 
 
 ## Requerimientos
