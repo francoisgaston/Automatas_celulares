@@ -7,7 +7,7 @@ df = pd.read_csv('output/Circles_OBC.csv')
 plt.figure(figsize=(10, 6))
 
 for particles, group in df.groupby('Particles'):
-    plt.scatter(group['Noise'], group['Pendiente'], label=f'N = {particles}')
+    plt.errorbar(group['Noise'], group['Pendiente'], yerr=group['Error']*3, fmt='o', label=f'N = {particles}')
 
 plt.xlabel('Ruido[rad]', fontsize=16)
 plt.ylabel('Pendiente', fontsize=16)

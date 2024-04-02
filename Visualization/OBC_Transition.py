@@ -15,11 +15,11 @@ import re
 # DATOS A CAMBIAR SEGÚN EL CASO DE ESTUDIO
 # ---------------------------------------------------
 OUTPUT_PATH = '../Simulation/Automatas/output/'
-N = 100
+N = 300
 L = 5
 RADIUS = 0.5
 N_CIRCLES = 4
-TIMES = 1000
+TIMES = 4000
 STEPS = 5
 # ---------------------------------------------------
 
@@ -99,10 +99,11 @@ def plot_data(parcial_count, noises):
             for valor in circle_vector:
                 acumulado += valor
                 array_acumulado.append(acumulado)
-            if index_circle == 0:
-                plt.plot(array_acumulado, label=f'Ruido {noises[index_file]}', color=colors[index_file])
-            else:
-                plt.plot(array_acumulado, color=colors[index_file])
+            if noises[index_file] == '0.0' or noises[index_file] == '2.0' or noises[index_file] == '4.0':
+                if index_circle == 0:
+                    plt.plot(array_acumulado, label=f'Ruido {noises[index_file]}', color=colors[index_file])
+                else:
+                    plt.plot(array_acumulado, color=colors[index_file])
     
     print("---------------------------------------")
     print("Datos guardados en: output/Circles_PBC.csv")
@@ -133,12 +134,39 @@ def save_best_c(prom_count, noises):
         writer.writeheader()
 
         for index_file, file_vector in enumerate(prom_count):
-            c, error = regresion_best_c(file_vector)
+            error = 0.005
+            plot = (noises[index_file] == '2.0')
+            c = best_c_alg(file_vector, error, plot)
             writer.writerow({'Noise': noises[index_file], 'Pendiente': c, 'Error':error})
             best_c.append(c)
     return best_c
 
+def best_c_alg(values, apreciacion, plot):
 
+    init_c = 0
+    max_c = 1
+    plt.figure(figsize=(10, 6))
+    min_error = float('inf')
+    best_c = 0
+    step = int(max_c / apreciacion)
+
+    for step_index in range(step):
+        c = init_c + step_index * apreciacion
+        error = 0
+        for index_value, value in enumerate(values):
+            error += (value - c*index_value) ** 2
+        if plot:
+            plt.scatter(c, error, color='red', s=10)
+        if error < min_error:
+            min_error = error
+            best_c = c
+    if plot:
+        plt.axvline(x=best_c, color='green', linestyle='--', linewidth=2)
+
+        plt.xlabel('Pendiente', fontsize=16)
+        plt.ylabel('Error', fontsize=16)
+        plt.show()
+    return best_c
 
 def regresion_best_c(values):
 
@@ -185,7 +213,8 @@ def main():
 
     best_c = save_best_c(prom_count, noises)
 
-    
+    plt.figure(figsize=(10, 6))
+
     for prom in prom_count:
         plt.plot(prom)
 
@@ -194,6 +223,8 @@ def main():
         y = [linea_recta(xi, c) for xi in x] 
         plt.plot(x, y)
 
+    plt.xlabel('Numero de particulas', fontsize=16)
+    plt.ylabel('Tiempo[s]', fontsize=16)
     plt.show()
     
 
