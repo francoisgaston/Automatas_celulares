@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # Leer el archivo CSV
-df = pd.read_csv('output/Circles_PBC_25.0.csv')
+df = pd.read_csv('output/Circles_PBC_12.5.csv')
 
 plt.figure(figsize=(10, 6))
 

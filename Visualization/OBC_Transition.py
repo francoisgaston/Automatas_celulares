@@ -15,7 +15,7 @@ import re
 # DATOS A CAMBIAR SEGÚN EL CASO DE ESTUDIO
 # ---------------------------------------------------
 OUTPUT_PATH = '../Simulation/Automatas/output/'
-N = 300
+N = 600
 L = 5
 RADIUS = 0.5
 N_CIRCLES = 4
