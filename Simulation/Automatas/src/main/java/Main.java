@@ -6,7 +6,7 @@ import java.io.IOException;
 public class Main {
     public static void main(String[] args) {
         // Realizar solo una simulación para realizar una animación
-        //Simulation();
+        Simulation();
 
         // Realizar simulaciones para luego analizar variación de polarizacion vs tiempo segun el nivel de ruido
         //NoiseMultiSimulation();
@@ -15,7 +15,7 @@ public class Main {
         //DensityMultiSimulation();
 
         // Realizar simulaciones para luego analizar comportamiento en funcion a 4 circulos para el ruido
-        CircleNoiseMultiSimulation();
+        //CircleNoiseMultiSimulation();
     }
 
     public static void Simulation(){
